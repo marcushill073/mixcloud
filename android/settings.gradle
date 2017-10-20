@@ -1,0 +1,6 @@
+rootProject.name = 'mixcloud'
+
+include ':app'
+
+include ':realm'
+project(':realm').projectDir = new File('../node_modules/realm/android')

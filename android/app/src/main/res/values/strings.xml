@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">MixCloud</string>
+    <string name="client_id">85yqWZ5zrbRGnN2tkA</string>
+    <string name="client_secret">VMXPueW6p2p8zdf5gn7JWjrt5JvFvT2p</string>
+    <string-array name="drawer_strings">
+        <item>Tracks</item>>
+        <item>Playlist</item>
+        <item>Groups</item>
+        <item>Following</item>
+    </string-array>
+</resources>
