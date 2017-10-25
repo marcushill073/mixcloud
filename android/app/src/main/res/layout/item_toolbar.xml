@@ -11,6 +11,14 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:title="@string/app_name"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_cloud_logo"/>
+
+</android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>

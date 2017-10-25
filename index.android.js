@@ -20,6 +20,7 @@ export default class mixcloud extends Component {
 
   
   render() {
+    let token = false;
     let code;
     return(
       <WebView source={{uri: URL}}
@@ -31,7 +32,7 @@ export default class mixcloud extends Component {
           var uri = url.parse(prevState.url, true);
 
 
-          if(uri && uri.query && uri.query.code) {
+          if(uri && uri.query && uri.query.code && !token) {
 
           var formData = new FormData();
           formData.append('code', uri.query.code);
@@ -47,6 +48,7 @@ export default class mixcloud extends Component {
           .then((body) => {
             AsyncStorage.setItem('@Mixcloud:token', body.access_token);
           NativeModules.JSViewHelperModule.startNativeView('home');
+          token=true;
           })
           .catch((error)=> {
             console.log(error)
