@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AppRegistry, AsyncStorage } from 'react-native';
+import { adaptUser } from Adapters;
 
 export function fetchUser(id, callback) {
 
