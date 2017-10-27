@@ -13,7 +13,7 @@ public class JSDispatchRequestPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         ArrayList<NativeModule> modules = new ArrayList<>();
-        modules.add(new JSDispatchRequestModule(reactContext));
+        modules.add(new DispatchRequestModule(reactContext));
         return modules;    }
 
     @Override

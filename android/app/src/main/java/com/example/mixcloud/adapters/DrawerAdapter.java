@@ -37,8 +37,8 @@ public class DrawerAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
-        LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        view = inflater.inflate(R.layout.item_drawer_header, null);
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        view = inflater.inflate(R.layout.item_drawer, null);
         TextView text = (TextView) view.findViewById(R.id.drawer_item_text);
         ImageView image = (ImageView) view.findViewById(R.id.drawer_item_image);
 
@@ -49,6 +49,15 @@ public class DrawerAdapter extends BaseAdapter{
 
             case "Tracks":
                 image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_disc_5));
+                break;
+            case "Playlist":
+                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_disc_7));
+                break;
+            case "Groups":
+                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_user_29));
+            break;
+            case "Following":
+                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_user_1));
                 break;
 
         }

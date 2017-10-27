@@ -3,9 +3,6 @@ package com.example.mixcloud;
 import android.app.Activity;
 import android.app.Application;
 
-import com.example.mixcloud.react.DaggerJSDataComponent;
-import com.example.mixcloud.react.JSDataComponent;
-import com.example.mixcloud.react.JSDispatchRequestModule;
 import com.example.mixcloud.react.JSDispatchRequestPackage;
 import com.example.mixcloud.react.JSViewHelperPackage;
 import com.facebook.react.ReactApplication;
@@ -24,9 +21,6 @@ public class MixCloudApp extends Application implements ReactApplication {
 
 
     private static MixCloudApp app;
-
-
-    private static JSDataComponent jsDataComponent;
 
     private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
         @Override
@@ -61,17 +55,6 @@ public class MixCloudApp extends Application implements ReactApplication {
 
     public static MixCloudApp getApplicationContext(Activity activity) {
         return (MixCloudApp) activity.getApplicationContext();
-    }
-
-    public JSDispatchRequestModule getJsDispatchRequestModule() {
-        return getReactNativeHost().getReactInstanceManager().getCurrentReactContext().getNativeModule(JSDispatchRequestModule.class);
-    }
-
-    public JSDataComponent getJsDataComponent() {
-        if (jsDataComponent == null) {
-            jsDataComponent = DaggerJSDataComponent.builder().jSDispatchRequestModule(getJsDispatchRequestModule()).build();
-        }
-        return jsDataComponent;
     }
 
     public static MixCloudApp getApp() {
