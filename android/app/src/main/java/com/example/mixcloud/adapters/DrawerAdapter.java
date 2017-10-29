@@ -1,6 +1,7 @@
 package com.example.mixcloud.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class DrawerAdapter extends BaseAdapter{
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         view = inflater.inflate(R.layout.item_drawer, null);
         TextView text = (TextView) view.findViewById(R.id.drawer_item_text);
-        ImageView image = (ImageView) view.findViewById(R.id.drawer_item_image);
+        AppCompatImageView image = (AppCompatImageView) view.findViewById(R.id.drawer_item_image);
 
         String str = stringArrayRes[position];
         text.setText(str);
@@ -48,16 +49,16 @@ public class DrawerAdapter extends BaseAdapter{
         switch(str) {
 
             case "Tracks":
-                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_disc_5));
+                image.setImageResource(R.drawable.ic_iconmonstr_disc_5);
                 break;
             case "Playlist":
-                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_disc_7));
+                image.setImageResource(R.drawable.ic_iconmonstr_disc_7);
                 break;
             case "Groups":
-                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_user_29));
+                image.setImageResource(R.drawable.ic_iconmonstr_user_29);
             break;
             case "Following":
-                image.setImageDrawable(view.getContext().getResources().getDrawable(R.drawable.ic_iconmonstr_user_1));
+                image.setImageResource(R.drawable.ic_iconmonstr_user_1);
                 break;
 
         }
