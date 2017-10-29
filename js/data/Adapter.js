@@ -4,7 +4,7 @@
 * @flow
 */
 
-import { User, Pictures, parseBody } from '../schema/User'
+import { User, Pictures } from '../schema/User'
 const BASE_URL='https://api.mixcloud.com/marcushill073/';
 const Realm = require('realm');
 
@@ -19,22 +19,22 @@ export default class Adapter {
       .then(realm => {
         realm.write(() => {
         const picture = realm.create('Pictures', {
-          extra_large: body.pictures.extra_large,
+          extraLarge: body.pictures.extra_large,
           large: body.pictures.large,
           medium: body.pictures.medium,
-          medium_mobile: body.pictures.medium_mobile,
+          mediumMobile: body.pictures.medium_mobile,
           small: body.pictures.small,
           thumbnail: body.pictures.thumbnail
         });
         const user = realm.create('User', {
-          cloudcast_count: body.cloudcast_count,
-          favorite_count: body.favorite_count,
-          follower_count: body.follower_count,
-          following_count: body.following_count,
-          is_premium: body.is_premium,
+          cloudcastCount: body.cloudcast_count,
+          favoriteCount: body.favorite_count,
+          followerCount: body.follower_count,
+          followingCount: body.following_count,
+          isPremium: body.is_premium,
           key: body.key,
           name: body.name,
-          pictures: picture,
+          pictures: pictures,
           url: body.url,
           username: body.username
         });

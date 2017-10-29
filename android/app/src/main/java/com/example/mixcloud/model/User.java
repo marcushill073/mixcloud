@@ -7,30 +7,35 @@ import io.realm.RealmModel;
 @AutoValue
 public abstract class User implements RealmModel {
 
+    public abstract int cloudcastCount();
+    public abstract int favoriteCount();
+    public abstract int followerCount();
+    public abstract int followingCount();
+    public abstract boolean isPremium();
+    public abstract String key();
     public abstract String name();
-
-    public abstract int age();
-
-    public abstract Address address();
-
-    public abstract MemberType memberType();
+    public abstract Pictures pictures();
+    public abstract String url();
+    public abstract String username();
 
     public abstract PlayList playLists();
 
     public static User.Builder builder() {
-        return new AutoValue_User.Builder().age(0);
+        return new AutoValue_User.Builder();
     }
 
     @AutoValue.Builder
     public abstract static class Builder {
+        public abstract Builder cloudcastCount(int value);
+        public abstract Builder favoriteCount(int value);
+        public abstract Builder followerCount(int value);
+        public abstract Builder followingCount(int value);
+        public abstract Builder isPremium(boolean value);
+        public abstract Builder key(String value);
         public abstract Builder name(String value);
-
-        public abstract Builder age(int value);
-
-        public abstract Builder address(Address value);
-
-        public abstract Builder memberType(MemberType value);
-
+        public abstract Builder pictures(Pictures value);
+        public abstract Builder url(String value);
+        public abstract Builder username(String value);
         public abstract Builder playLists(PlayList value);
 
         public abstract User builder();
