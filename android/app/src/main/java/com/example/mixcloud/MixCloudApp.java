@@ -3,7 +3,7 @@ package com.example.mixcloud;
 import android.app.Activity;
 import android.app.Application;
 
-import com.example.mixcloud.react.JSDispatchRequestPackage;
+import com.example.mixcloud.react.DispatchRequestPackage;
 import com.example.mixcloud.react.JSViewHelperPackage;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -34,7 +34,7 @@ public class MixCloudApp extends Application implements ReactApplication {
                     new MainReactPackage(),
                     new RealmReactPackage(),
                     new JSViewHelperPackage(),
-                    new JSDispatchRequestPackage()
+                    new DispatchRequestPackage()
             );
         }
     };

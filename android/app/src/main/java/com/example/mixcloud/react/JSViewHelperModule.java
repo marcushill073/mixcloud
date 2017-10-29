@@ -31,7 +31,6 @@ public class JSViewHelperModule extends ReactContextBaseJavaModule {
             case HOME:
                 Intent intent = new Intent(getCurrentActivity(), HomeActivity.class);
                 getCurrentActivity().startActivity(intent);
-                getCurrentActivity().finish();
                 break;
             default:
                 Timber.e("Unknown Activity");

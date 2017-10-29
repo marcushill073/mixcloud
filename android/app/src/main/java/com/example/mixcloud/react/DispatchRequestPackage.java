@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class JSDispatchRequestPackage implements ReactPackage {
+public class DispatchRequestPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         ArrayList<NativeModule> modules = new ArrayList<>();

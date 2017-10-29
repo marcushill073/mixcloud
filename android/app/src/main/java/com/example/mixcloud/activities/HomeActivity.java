@@ -10,13 +10,12 @@ import com.example.mixcloud.MixCloudApp;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.react.DispatchRequestModule;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import javax.inject.Inject;
 
 public class HomeActivity extends AppCompatActivity implements DispatchRequestModule.OnDownloadCompleteListener {
 
-
-    public DispatchRequestModule jsDispatchRequestModule;
 
     private DataComponent dataComponent;
 
@@ -29,18 +28,19 @@ public class HomeActivity extends AppCompatActivity implements DispatchRequestMo
         DrawerAdapter adapter = new DrawerAdapter(this);
         listView.setAdapter(adapter);
 
-        jsDispatchRequestModule = MixCloudApp.getApp().getReactNativeHost().getReactInstanceManager().getCurrentReactContext().getNativeModule(DispatchRequestModule.class);
-        jsDispatchRequestModule.fetchUser(this);
+        MixCloudApp.getApp().getReactNativeHost().getReactInstanceManager().getCurrentReactContext()
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("JSDispatchRequestModule", "USER");
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
     }
 
     @Override
-    public void onSuccess(int id) {
+    public void onSuccess() {
 
     }
 
     @Override
-    public void onError(int id) {
+    public void onError() {
 
     }
 }

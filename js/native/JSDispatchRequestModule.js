@@ -1,13 +1,35 @@
-import React, { Component } from 'react';
-import { AppRegistry, AsyncStorage } from 'react-native';
-import { adaptUser } from Adapters;
+ /*
+ *
+ * @providesModule JSDispatchRequestModule
+ * @flow
+ */
+ 'use strict';
 
-export function fetchUser(id, callback) {
+ import React, { Component } from 'react';
+ import { AppRegistry, NativeModules, AsyncStorage } from 'react-native';
+import Adapter from 'Adapter';
 
-	adaptUser()
-	.then(() => {callback.success(id)})
-	.catch(callback.error)
+export default class JSDispatchRequestModule {
+
+ fetchUser() {
+  this.fetchToken()
+  .then((token) => { Adapter.adaptUser(token) })
+  	.then(() => {NativeModules.DispatchRequestModule.onSuccess(id)})
+  	.catch((error) => {NativeModules.DispatchRequestModule.onError(id, error)})
 
 }
 
-exports.module = JSDispatchRequestModule;
+ handleRequest(event) {
+		if(event = 'USER') {
+      this.fetchUser();
+    }
+}
+
+async fetchToken() {
+
+  return await AsyncStorage.getItem('@Mixcloud:token')
+}
+
+};
+
+module.exports = new JSDispatchRequestModule();

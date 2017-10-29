@@ -5,20 +5,31 @@
  */
 
 import React, { Component } from 'react';
-import { AppRegistry, WebView, AsyncStorage, NativeModules } from 'react-native';
+import { AppRegistry, WebView, AsyncStorage, NativeModules, DeviceEventEmitter } from 'react-native';
+import JSDispatchRequestModule from 'JSDispatchRequestModule'
 
 const CLIENT_ID = '85yqWZ5zrbRGnN2tkA';
 const CLIENT_SECRET = 'VMXPueW6p2p8zdf5gn7JWjrt5JvFvT2p';
 const URL = 'https://www.mixcloud.com/oauth/authorize?client_id=' + CLIENT_ID + '&redirect_uri=http://www.example.com';
 
 export default class mixcloud extends Component {
+
   constructor(props) {
     super(props);
  // Opens the url in the default browser
 
   }
 
-  
+ componentDidMount(){
+   DeviceEventEmitter.addListener('JSDispatchRequestModule', (event) => {
+     JSDispatchRequestModule.handleRequest(event);
+   });
+ }
+
+ componentWillUnmount() {
+ }
+
+
   render() {
     let token = false;
     let code;
@@ -42,30 +53,26 @@ export default class mixcloud extends Component {
               body: formData
           };
 
-         
+
           fetch('https://www.mixcloud.com/oauth/access_token?client_id=' + CLIENT_ID + '&redirect_uri=http://www.example.com&client_secret=' + CLIENT_SECRET, options)
           .then((response) => response.json())
           .then((body) => {
-            AsyncStorage.setItem('@Mixcloud:token', body.access_token);
-          NativeModules.JSViewHelperModule.startNativeView('home');
-          token=true;
+            if(!token) {
+              AsyncStorage.setItem('@Mixcloud:token', body.access_token);
+              NativeModules.JSViewHelperModule.startNativeView('home');
+              token=true;
+            }
           })
           .catch((error)=> {
             console.log(error)
           });
 
         }
-        
+
       }
     }/>);
   }
 
 }
-
-async function fetchToken() {
-
-            return await AsyncStorage.getItem('@Podbean:token')
-          }
-  
 
 AppRegistry.registerComponent('mixcloud', () => mixcloud);
