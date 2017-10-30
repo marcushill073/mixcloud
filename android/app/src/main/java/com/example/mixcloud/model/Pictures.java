@@ -2,34 +2,77 @@ package com.example.mixcloud.model;
 
 import com.google.auto.value.AutoValue;
 
-import io.realm.RealmModel;
+import java.util.UUID;
 
-@AutoValue
-public abstract class Pictures implements RealmModel {
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
-    public abstract String extraLarge();
-    public abstract String large();
-    public abstract String medium();
-    public abstract String mediumMobile();
-    public abstract String small();
-    public abstract String thumbnail();
+public class Pictures extends RealmObject {
 
-    public static Pictures.Builder builder() {
-        return new AutoValue_Pictures.Builder();
+    @Ignore
+    private int sessionId;
+    
+    private String extraLarge;
+    private String large;
+    private String medium;
+    private String mediumMobile;
+    private String small;
+    private String thumbnail;
+
+    public int getSessionId() {
+        return sessionId;
     }
 
-    @AutoValue.Builder
-    public abstract static class Builder {
-        public abstract Builder extraLarge(String value);
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
 
-        public abstract Builder large(String value);
+    public String getExtraLarge() {
+        return extraLarge;
+    }
 
-        public abstract Builder medium(String value);
+    public void setExtraLarge(String extraLarge) {
+        this.extraLarge = extraLarge;
+    }
 
-        public abstract Builder mediumMobile(String value);
+    public String getLarge() {
+        return large;
+    }
 
-        public abstract Builder small(String value);
+    public void setLarge(String large) {
+        this.large = large;
+    }
 
-        public abstract Builder thumbnail(String value);
+    public String getMedium() {
+        return medium;
+    }
+
+    public void setMedium(String medium) {
+        this.medium = medium;
+    }
+
+    public String getMediumMobile() {
+        return mediumMobile;
+    }
+
+    public void setMediumMobile(String mediumMobile) {
+        this.mediumMobile = mediumMobile;
+    }
+
+    public String getSmall() {
+        return small;
+    }
+
+    public void setSmall(String small) {
+        this.small = small;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

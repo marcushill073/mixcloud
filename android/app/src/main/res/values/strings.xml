@@ -9,4 +9,7 @@
         <item>Groups</item>
         <item>Following</item>
     </string-array>
+    <string name="favourites">Favourites: </string>
+    <string name="followed">Followed: </string>
+    <string name="following">Following: </string>
 </resources>

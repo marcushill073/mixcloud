@@ -1,45 +1,122 @@
 package com.example.mixcloud.model;
 
-import com.google.auto.value.AutoValue;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 
-import io.realm.RealmModel;
 
-@AutoValue
-public abstract class User implements RealmModel {
+public class User extends RealmObject {
 
-    public abstract int cloudcastCount();
-    public abstract int favoriteCount();
-    public abstract int followerCount();
-    public abstract int followingCount();
-    public abstract boolean isPremium();
-    public abstract String key();
-    public abstract String name();
-    public abstract Pictures pictures();
-    public abstract String url();
-    public abstract String username();
+    @Ignore
+    private int sessionId;
 
-    public abstract PlayList playLists();
+    private int cloudcastCount;
+    private int favoriteCount;
+    private int followerCount;
+    private int followingCount;
+    private boolean isPremium;
+    private String key;
+    private String name;
+    private Pictures pictures;
+    private String url;
+    private String username;
 
-    public static User.Builder builder() {
-        return new AutoValue_User.Builder();
+//    private RealmList<PlayList> playLists;
+
+
+    public int getSessionId() {
+        return sessionId;
     }
 
-    @AutoValue.Builder
-    public abstract static class Builder {
-        public abstract Builder cloudcastCount(int value);
-        public abstract Builder favoriteCount(int value);
-        public abstract Builder followerCount(int value);
-        public abstract Builder followingCount(int value);
-        public abstract Builder isPremium(boolean value);
-        public abstract Builder key(String value);
-        public abstract Builder name(String value);
-        public abstract Builder pictures(Pictures value);
-        public abstract Builder url(String value);
-        public abstract Builder username(String value);
-        public abstract Builder playLists(PlayList value);
-
-        public abstract User builder();
-
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
     }
 
+    public int getCloudcastCount() {
+        return cloudcastCount;
+    }
+
+    public void setCloudcastCount(int cloudcastCount) {
+        this.cloudcastCount = cloudcastCount;
+    }
+
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public int getFollowerCount() {
+        return followerCount;
+    }
+
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
+    public void setFollowingCount(int followingCount) {
+        this.followingCount = followingCount;
+    }
+
+    public boolean isPremium() {
+        return isPremium;
+    }
+
+    public void setPremium(boolean premium) {
+        isPremium = premium;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Pictures getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(Pictures pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+//    public RealmList<PlayList> getPlayLists() {
+//        return playLists;
+//    }
+//
+//    public void setPlayLists(RealmList<PlayList> playLists) {
+//        this.playLists = playLists;
+//    }
 }
