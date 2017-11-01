@@ -36,25 +36,13 @@ public class DispatchRequestModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void onSuccess(int id) {
-        Activity activity = getCurrentActivity();
-        if(!activity.isFinishing()){
-            OnDownloadCompleteListener listener = requestIds.get(id);
-            if(listener != null){
-                listener.onSuccess();
-            }
-        }
+    public void onSuccess() {
+        //do nothing
     }
 
     @ReactMethod
-    public void onError(int id, ReadableMap error){
-        Activity activity = getCurrentActivity();
-        if(!activity.isFinishing()){
-            OnDownloadCompleteListener listener = requestIds.get(id);
-            if(listener != null){
-                listener.onError();
-            }
-        }
+    public void onError(ReadableMap error){
+        //todo
     }
     public interface OnDownloadCompleteListener {
 

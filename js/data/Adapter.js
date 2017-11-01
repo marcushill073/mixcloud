@@ -34,7 +34,7 @@ export default class Adapter {
           isPremium: body.is_premium,
           key: body.key,
           name: body.name,
-          pictures: pictures,
+          pictures: picture,
           url: body.url,
           username: body.username
         });

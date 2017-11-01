@@ -14,8 +14,8 @@ export default class JSDispatchRequestModule {
  fetchUser() {
   this.fetchToken()
   .then((token) => { Adapter.adaptUser(token) })
-  	.then(() => {NativeModules.DispatchRequestModule.onSuccess(id)})
-  	.catch((error) => {NativeModules.DispatchRequestModule.onError(id, error)})
+  	.then(() => {NativeModules.DispatchRequestModule.onSuccess()})
+  	.catch((error) => {NativeModules.DispatchRequestModule.onError(error)})
 
 }
 

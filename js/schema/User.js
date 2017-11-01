@@ -1,4 +1,19 @@
 
+export class Pictures {}
+
+Pictures.schema = {
+  name: 'Pictures',
+  properties: {
+    extraLarge: {type: 'string', optional: true},
+    large: {type: 'string', optional: true},
+    medium: {type: 'string', optional: true},
+    mediumMobile: {type: 'string', optional: true},
+    small: {type: 'string', optional: true},
+    thumbnail: {type: 'string', optional: true}
+
+  }
+}
+
 export class User {}
 
 User.schema = {
@@ -9,25 +24,10 @@ User.schema = {
     followerCount: 'int',
     followingCount: 'int',
     isPremium: 'bool',
-    key: 'string',
-    name: 'string',
+    key: {type: 'string', optional: true},
+    name: {type: 'string', optional: true},
     pictures: {type: 'Pictures'},
-    url: 'string',
-    username: 'string'
-  }
-}
-
-export class Pictures {}
-
-Pictures.schema = {
-  name: 'Pictures',
-  properties: {
-    extraLarge: 'string',
-    large: 'string',
-    medium:'string',
-    mediumMobile: 'string',
-    small: 'string',
-    thumbnail: 'string'
-
+    url: {type: 'string', optional: true},
+    username: {type: 'string', optional: true}
   }
 }
