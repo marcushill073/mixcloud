@@ -14,6 +14,7 @@ import com.facebook.soloader.SoLoader;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class MixCloudApp extends Application implements ReactApplication{
 
@@ -26,7 +27,7 @@ public class MixCloudApp extends Application implements ReactApplication{
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
-        Realm.init(this);
+       Realm.init(this);
 
         dataComponent = DaggerDataComponent.builder()
                 .userModule(new UserModule())

@@ -14,13 +14,10 @@ import javax.inject.Inject;
 
 public class MainActivity extends ReactActivity {
 
-    @Inject
-    ReactNativeHost reactNativeHost;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        MixCloudApp.getDataComponent().inject(this);
     }
 
     /**
