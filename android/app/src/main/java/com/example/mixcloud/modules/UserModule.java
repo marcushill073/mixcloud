@@ -23,10 +23,18 @@ public class UserModule {
     @Inject
     public ReactNativeHost reactNativeHost;
 
-    private User user;
+    private User user = new User();
     private RealmResults<User> users;
 
     public UserModule() {
+
+    }
+
+
+    @Singleton
+    @Provides
+    public User fetchUser() {
+
         MixCloudApp.getDataComponent().inject(this);
         reactNativeHost.getReactInstanceManager().getCurrentReactContext()
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
@@ -34,19 +42,13 @@ public class UserModule {
 
         Realm realm = Realm.getDefaultInstance();
         users = realm.where(User.class).findAll();
-        user = users.isEmpty() ? null : users.get(0);
+        user = users.isEmpty() ? user : users.get(0);
         users.addChangeListener(new RealmChangeListener<RealmResults<User>>() {
             @Override
             public void onChange(RealmResults<User> results) {
-                user = results.isEmpty() ? null : results.get(0);
+                user = results.isEmpty() ? user : results.get(0);
             }
         });
-    }
-
-
-    @Singleton
-    @Provides
-    public User fetchUser() {
         return user;
     }
 

@@ -40,13 +40,14 @@ public class HomeActivity extends AppCompatActivity implements DispatchRequestMo
 
         ListView listView = (ListView) findViewById(R.id.left_drawer);
         DrawerAdapter adapter = new DrawerAdapter(this);
-        listView.setAdapter(adapter);
 
         ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.item_drawer_header, null, false);
         binding.setVariable(BR.user, user);
         binding.executePendingBindings();
 
         listView.addHeaderView(binding.getRoot());
+        listView.setAdapter(adapter);
+
     }
 
     @Override

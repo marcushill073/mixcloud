@@ -19,10 +19,10 @@ export class User {}
 User.schema = {
   name: 'User',
   properties: {
-    cloudcastCount: 'int',
-    favoriteCount: 'int',
-    followerCount: 'int',
-    followingCount: 'int',
+    cloudcastCount: {type: 'int', default:0},
+    favoriteCount: {type: 'int', default:0},
+    followerCount: {type: 'int', default:0},
+    followingCount: {type: 'int', default:0},
     isPremium: 'bool',
     key: {type: 'string', optional: true},
     name: {type: 'string', optional: true},

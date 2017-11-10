@@ -11,7 +11,7 @@
     "react": "^16.0.0-alpha.12",
     "react-native": "^0.48.4",
     "react-native-cli": "^2.0.1",
-    "realm": "^1.13.0",
+    "realm": "^2.0.4",
     "request": "^2.83.0",
     "url": "^0.11.0",
     "with-query": "^1.0.2"
