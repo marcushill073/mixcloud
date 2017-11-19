@@ -10,53 +10,51 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mixcloud.BR;
-import com.example.mixcloud.MixCloudApp;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
-import com.example.mixcloud.model.RequestDispatcher;
 import com.example.mixcloud.model.User;
-import com.example.mixcloud.react.DispatchRequestModule;
-import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.ReactNativeHost;
+import com.example.mixcloud.modules.DaggerDataComponent;
+import com.example.mixcloud.modules.DataComponent;
+import com.example.mixcloud.modules.ServiceModule;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-public class HomeActivity extends AppCompatActivity implements DispatchRequestModule.OnDownloadCompleteListener {
+import rx.Observable;
+import rx.schedulers.Schedulers;
+import rx.android.schedulers.AndroidSchedulers;
+
+public class HomeActivity extends AppCompatActivity {
 
     @Inject
-    ReactNativeHost reactNativeHost;
-
-    @Inject
-    public User user;
+    public Observable<User> userSubsrciption;
+    public User mUser;
+    private ViewDataBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        MixCloudApp.getDataComponent().inject(this);
+        DataComponent dataComponent = DaggerDataComponent.builder()
+                .serviceModule(new ServiceModule(this))
+                .build();
 
+        dataComponent.inject(this);
 
-        ListView listView = (ListView) findViewById(R.id.left_drawer);
-        DrawerAdapter adapter = new DrawerAdapter(this);
+        userSubsrciption.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((user) -> {
+                    mUser = user;
+                    binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.item_drawer_header, null, false);
+                    binding.setVariable(BR.user, mUser);
+                    binding.executePendingBindings();
 
-        ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.item_drawer_header, null, false);
-        binding.setVariable(BR.user, user);
-        binding.executePendingBindings();
-
-        listView.addHeaderView(binding.getRoot());
-        listView.setAdapter(adapter);
-
-    }
-
-    @Override
-    public void onSuccess() {
-
-    }
-
-    @Override
-    public void onError() {
+                    ListView listView = (ListView) findViewById(R.id.left_drawer);
+                    DrawerAdapter adapter = new DrawerAdapter(this);
+                    listView.addHeaderView(binding.getRoot());
+                    listView.setAdapter(adapter);
+                });
 
     }
 

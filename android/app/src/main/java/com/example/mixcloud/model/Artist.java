@@ -1,19 +1,15 @@
 package com.example.mixcloud.model;
 
 import com.google.auto.value.AutoValue;
-
-import io.realm.RealmModel;
-import io.realm.annotations.Ignore;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 
 @AutoValue
-public abstract class Artist implements RealmModel {
+public abstract class Artist {
 
     public abstract String name();
 
     public abstract Country country();
-
-    @Ignore
-    public String sessionId;
 
     public static Artist.Builder builder() {
         return new AutoValue_Artist.Builder();
@@ -29,4 +25,9 @@ public abstract class Artist implements RealmModel {
         public abstract Artist build();
 
     }
+
+    public static TypeAdapter<Artist> typeAdapter(Gson gson) {
+        return new AutoValue_Artist.GsonTypeAdapter(gson);
+    }
+
 }

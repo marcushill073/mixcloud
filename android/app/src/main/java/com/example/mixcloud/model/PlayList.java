@@ -1,12 +1,10 @@
 package com.example.mixcloud.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 
 import java.util.List;
-
-import io.realm.RealmModel;
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
 
 @AutoValue
 public abstract class PlayList  {
@@ -14,9 +12,6 @@ public abstract class PlayList  {
     public abstract String name();
 
     public abstract List<Track> tracks();
-
-    @Ignore
-    public String sessionId;
 
     public static Builder builder() {
         return new AutoValue_PlayList.Builder();
@@ -32,4 +27,9 @@ public abstract class PlayList  {
         public abstract PlayList builder();
 
     }
+
+    public static TypeAdapter<PlayList> typeAdapter(Gson gson) {
+        return new AutoValue_PlayList.GsonTypeAdapter(gson);
+    }
+
 }

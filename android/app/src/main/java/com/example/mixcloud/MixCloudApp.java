@@ -2,46 +2,46 @@ package com.example.mixcloud;
 
 import android.app.Application;
 
-import com.example.mixcloud.modules.AppModule;
-import com.example.mixcloud.modules.DaggerDataComponent;
-import com.example.mixcloud.modules.DataComponent;
-import com.example.mixcloud.modules.ReactManagerInstanceModule;
-import com.example.mixcloud.modules.UserModule;
+import com.example.mixcloud.react.DispatchRequestPackage;
+import com.example.mixcloud.react.JSViewHelperPackage;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.List;
 
-import io.realm.Realm;
+public class MixCloudApp extends Application implements ReactApplication {
 
-public class MixCloudApp extends Application implements ReactApplication{
-
-    @Inject
-    ReactNativeHost reactNativeHost;
-
-    static DataComponent dataComponent;
+    public ReactNativeHost reactNativeHost;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        reactNativeHost = new ReactNativeHost(this) {
+            @Override
+            public boolean getUseDeveloperSupport() {
+                return true;
+            }
+
+            @Override
+            protected List<ReactPackage> getPackages() {
+                return Arrays.<ReactPackage>asList(
+                        new MainReactPackage(),
+                        new JSViewHelperPackage(),
+                        new DispatchRequestPackage()
+                );
+            }
+        };
         SoLoader.init(this, /* native exopackage */ false);
-        Realm.init(this);
 
-        dataComponent = DaggerDataComponent.builder()
-                .userModule(new UserModule())
-                .appModule(new AppModule(this))
-                .reactManagerInstanceModule(new ReactManagerInstanceModule(this))
-                .build();
-        dataComponent.inject(this);
-    }
-
-    public static DataComponent getDataComponent() {
-        return dataComponent;
     }
 
     @Override
     public ReactNativeHost getReactNativeHost() {
         return reactNativeHost;
     }
+
 }

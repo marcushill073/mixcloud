@@ -1,78 +1,56 @@
 package com.example.mixcloud.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 
-import java.util.UUID;
+import javax.annotation.Nullable;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
+@AutoValue
+public abstract class Pictures {
 
-public class Pictures extends RealmObject {
+    @Nullable
+    public abstract String extraLarge();
 
-    @Ignore
-    private int sessionId;
-    
-    private String extraLarge;
-    private String large;
-    private String medium;
-    private String mediumMobile;
-    private String small;
-    private String thumbnail;
+    @Nullable
+    public abstract String large();
 
-    public int getSessionId() {
-        return sessionId;
+    @Nullable
+    public abstract String medium();
+
+    @Nullable
+    public abstract String mediumMobile();
+
+    @Nullable
+    public abstract String small();
+
+    @Nullable
+    public abstract String thumbnail();
+
+    public static Builder builder() {
+        return new AutoValue_Pictures.Builder();
     }
 
-    public void setSessionId(int sessionId) {
-        this.sessionId = sessionId;
+    @AutoValue.Builder
+    public abstract static class Builder {
+
+        public abstract Builder extraLarge(String value);
+
+        public abstract Builder large(String value);
+
+        public abstract Builder medium(String value);
+
+        public abstract Builder mediumMobile(String value);
+
+        public abstract Builder small(String value);
+
+        public abstract Builder thumbnail(String value);
+
+        public abstract Pictures build();
     }
 
-    public String getExtraLarge() {
-        return extraLarge;
+    public static TypeAdapter<Pictures> typeAdapter(Gson gson) {
+        return new AutoValue_Pictures.GsonTypeAdapter(gson);
     }
 
-    public void setExtraLarge(String extraLarge) {
-        this.extraLarge = extraLarge;
-    }
-
-    public String getLarge() {
-        return large;
-    }
-
-    public void setLarge(String large) {
-        this.large = large;
-    }
-
-    public String getMedium() {
-        return medium;
-    }
-
-    public void setMedium(String medium) {
-        this.medium = medium;
-    }
-
-    public String getMediumMobile() {
-        return mediumMobile;
-    }
-
-    public void setMediumMobile(String mediumMobile) {
-        this.mediumMobile = mediumMobile;
-    }
-
-    public String getSmall() {
-        return small;
-    }
-
-    public void setSmall(String small) {
-        this.small = small;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
 }

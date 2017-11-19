@@ -4126,9 +4126,9 @@ readable-stream@~1.1.8, readable-stream@~1.1.9:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-realm@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-2.0.5.tgz#a7f47f7e26d7c3c025c30cad1451ee4dadf80fae"
+realm@^2.0.0:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-2.0.6.tgz#6e7a140fdc38aa04f973323aa50d7b82983c3adf"
   dependencies:
     command-line-args "^4.0.6"
     decompress "^4.2.0"

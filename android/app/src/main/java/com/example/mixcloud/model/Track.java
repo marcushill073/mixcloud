@@ -2,11 +2,8 @@ package com.example.mixcloud.model;
 
 import com.google.auto.value.AutoValue;
 
-import io.realm.RealmModel;
-import io.realm.annotations.Ignore;
-
 @AutoValue
-public abstract class Track implements RealmModel {
+public abstract class Track {
 
     public abstract Artist artist();
     public abstract String trackName();
@@ -14,9 +11,6 @@ public abstract class Track implements RealmModel {
     public abstract String label();
     public abstract String genre();
     public abstract boolean isExplicit();
-
-    @Ignore
-    public String sessionId;
 
     public static Track.Builder builder() {
         return new AutoValue_Track.Builder();

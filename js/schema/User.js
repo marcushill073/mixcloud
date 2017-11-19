@@ -1,6 +1,6 @@
 
-export class Pictures {}
 
+export class Pictures {}
 Pictures.schema = {
   name: 'Pictures',
   properties: {
@@ -10,12 +10,10 @@ Pictures.schema = {
     mediumMobile: {type: 'string', optional: true},
     small: {type: 'string', optional: true},
     thumbnail: {type: 'string', optional: true}
-
   }
-}
+};
 
 export class User {}
-
 User.schema = {
   name: 'User',
   properties: {
@@ -30,4 +28,4 @@ User.schema = {
     url: {type: 'string', optional: true},
     username: {type: 'string', optional: true}
   }
-}
+};

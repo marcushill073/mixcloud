@@ -20,16 +20,6 @@ export default class mixcloud extends Component {
 
   }
 
- componentDidMount(){
-   DeviceEventEmitter.addListener('JSDispatchRequestModule', (event) => {
-     JSDispatchRequestModule.handleRequest(event);
-   });
- }
-
- componentWillUnmount() {
- }
-
-
   render() {
     let token = false;
     let code;
@@ -58,8 +48,7 @@ export default class mixcloud extends Component {
           .then((response) => response.json())
           .then((body) => {
             if(!token) {
-              AsyncStorage.setItem('@Mixcloud:token', body.access_token);
-              NativeModules.JSViewHelperModule.startNativeView('home');
+              NativeModules.JSViewHelperModule.startNativeView('home', body.access_token);
               token=true;
             }
           })
