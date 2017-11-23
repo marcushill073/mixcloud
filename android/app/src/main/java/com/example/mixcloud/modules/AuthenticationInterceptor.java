@@ -1,6 +1,10 @@
 package com.example.mixcloud.modules;
 
 
+import android.content.Context;
+
+import com.example.mixcloud.R;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -10,19 +14,24 @@ import okhttp3.Response;
 class AuthenticationInterceptor implements Interceptor {
 
 
-    private final String authToken;
+    private final Context context;
 
-    public AuthenticationInterceptor(String authToken) {
-        this.authToken = authToken;
+    public AuthenticationInterceptor(Context context) {
+        this.context = context;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
 
-        Request.Builder builder = original.newBuilder().url(original.url() + "?access_token=" + authToken);
+        if(!original.url().toString().contains("access_token")) {
 
-        Request request = builder.build();
-        return chain.proceed(request);
+            String token = context.getSharedPreferences(context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE)
+                    .getString(context.getResources().getString(R.string.token), null);
+            Request.Builder builder = original.newBuilder().url(original.url() + "?access_token=" + token);
+
+            original = builder.build();
+        }
+        return chain.proceed(original);
     }
 }

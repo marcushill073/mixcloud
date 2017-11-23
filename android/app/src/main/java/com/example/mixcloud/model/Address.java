@@ -3,6 +3,8 @@ package com.example.mixcloud.model;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 
 @AutoValue
@@ -28,7 +30,7 @@ public abstract class Address {
         public abstract Address build();
     }
 
-    public static TypeAdapter<Address> typeAdapter(Gson gson) {
-        return new AutoValue_Address.GsonTypeAdapter(gson);
+    public static JsonAdapter<Address> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Address.MoshiJsonAdapter(moshi);
     }
 }

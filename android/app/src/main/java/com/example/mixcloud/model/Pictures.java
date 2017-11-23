@@ -3,6 +3,8 @@ package com.example.mixcloud.model;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import javax.annotation.Nullable;
 
@@ -49,8 +51,8 @@ public abstract class Pictures {
         public abstract Pictures build();
     }
 
-    public static TypeAdapter<Pictures> typeAdapter(Gson gson) {
-        return new AutoValue_Pictures.GsonTypeAdapter(gson);
+    public static JsonAdapter<Pictures> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Pictures.MoshiJsonAdapter(moshi);
     }
 
 }

@@ -33,7 +33,7 @@ public class JSViewHelperModule extends ReactContextBaseJavaModule {
             case HOME:
                 SharedPreferences.Editor sharedPreferences = getCurrentActivity().getSharedPreferences(getCurrentActivity()
                         .getString(R.string.app_name), Context.MODE_PRIVATE).edit();
-                sharedPreferences.putString(getCurrentActivity().getString(R.string.token), token);
+                sharedPreferences.putString(getCurrentActivity().getString(R.string.token), token).commit();
                 Intent intent = new Intent(getCurrentActivity(), HomeActivity.class);
                 getCurrentActivity().startActivity(intent);
                 getCurrentActivity().finish();

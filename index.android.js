@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import { AppRegistry, WebView, AsyncStorage, NativeModules, DeviceEventEmitter } from 'react-native';
+import { AppRegistry, WebView, NativeModules } from 'react-native';
 import JSDispatchRequestModule from 'JSDispatchRequestModule'
 
 const CLIENT_ID = '85yqWZ5zrbRGnN2tkA';
