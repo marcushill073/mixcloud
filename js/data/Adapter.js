@@ -5,18 +5,15 @@
 */
 
 import { User, Pictures } from '../schema/User'
-const BASE_URL='https://api.mixcloud.com/marcushill073/';
-const Realm = require('realm');
 
 export default class Adapter {
 
-  adaptUser(token) {
+  adaptUser(body) {
+    var Realm = require('realm');
 
-    fetch(BASE_URL + '?access_token=' + token)
-    .then((response) => response.json())
-    .then((body) => {
       Realm.open({schema: [User, Pictures]})
-      .then(realm => {
+      .then((realm) => {
+
         realm.write(() => {
         const picture = realm.create('Pictures', {
           extraLarge: body.pictures.extra_large,
@@ -26,6 +23,9 @@ export default class Adapter {
           small: body.pictures.small,
           thumbnail: body.pictures.thumbnail
         });
+      });
+
+        realm.write(() => {
         const user = realm.create('User', {
           cloudcastCount: body.cloudcast_count,
           favoriteCount: body.favorite_count,
@@ -39,7 +39,6 @@ export default class Adapter {
           username: body.username
         });
       });
-      })
     })
     .catch((error)=> {
       console.log(error)

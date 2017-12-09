@@ -13,12 +13,28 @@
         android:title="@string/app_name"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/menu_button"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="start"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_menu_black_logo"/>
+
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_cloud_logo"/>
 
-</android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingRight="10dp"
+            android:layout_gravity="end"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_search_black_logo"/>
+
+    </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>

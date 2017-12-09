@@ -9,13 +9,20 @@
  import { AppRegistry, NativeModules, AsyncStorage } from 'react-native';
 import Adapter from 'Adapter';
 
+const BASE_URL='https://api.mixcloud.com/marcushill073/';
+
+
 export default class JSDispatchRequestModule {
 
  fetchUser() {
   this.fetchToken()
-  .then((token) => { Adapter.adaptUser(token) })
-  	.then(() => {NativeModules.DispatchRequestModule.onSuccess()})
-  	.catch((error) => {NativeModules.DispatchRequestModule.onError(error)})
+  .then((token) => {
+    fetch(BASE_URL + '?access_token=' + token)
+    .then((response) => response.json())
+    .then((body) => {Adapter.adaptUser(body)})
+  })
+  .catch((error) => {console.log(error)});
+
 
 }
 

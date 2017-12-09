@@ -1,42 +1,91 @@
 package com.example.mixcloud.model;
 
-import com.google.auto.value.AutoValue;
+import android.support.annotation.Nullable;
 
-import io.realm.RealmModel;
-import io.realm.annotations.Ignore;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+import java.util.List;
 
 @AutoValue
-public abstract class Track implements RealmModel {
+public abstract class Track {
 
-    public abstract Artist artist();
-    public abstract String trackName();
-    public abstract Double duration();
-    public abstract String label();
-    public abstract String genre();
-    public abstract boolean isExplicit();
+    public abstract String key();
 
-    @Ignore
-    public String sessionId;
+    @Nullable
+    public abstract String createdTime();
 
-    public static Track.Builder builder() {
+    public abstract long audioLength();
+
+    @Nullable
+    public abstract String slug();
+
+    public abstract int favoriteCount();
+
+    public abstract int listenerCount();
+
+    public abstract String name();
+
+    @Nullable
+    public abstract String url();
+
+    public abstract Pictures pictures();
+
+    public abstract User user();
+
+    public abstract List<Tag> tags();
+
+    public abstract int repostCount();
+
+    @Nullable
+    public abstract String updatedTime();
+
+    public abstract int commentCount();
+
+    public static  Builder builder() {
         return new AutoValue_Track.Builder();
     }
 
     @AutoValue.Builder
     public abstract static class Builder {
 
-        public abstract Builder artist(Artist value);
+        public abstract Builder key(String value);
 
-        public abstract Builder trackName(String value);
+        public abstract Builder createdTime(String value);
 
-        public abstract Builder duration(Double value);
+        public abstract Builder audioLength(long value);
 
-        public abstract Builder label(String value);
+        public abstract Builder slug(String value);
 
-        public abstract Builder genre(String value);
+        public abstract Builder favoriteCount(int value);
 
-        public abstract Builder isExplicit(boolean value);
+        public abstract Builder listenerCount(int value);
 
-        public abstract Track builder();
+        public abstract Builder name(String value);
+
+        public abstract Builder url(String url);
+
+        public abstract Builder pictures(Pictures pictures);
+
+        public abstract Builder user(User value);
+
+        public abstract Builder tags(List<Tag> value);
+
+        public abstract Builder repostCount(int value);
+
+        public abstract Builder updatedTime(String value);
+
+        public abstract Builder commentCount(int value);
+
+        public abstract Track build();
     }
+
+    public static JsonAdapter<Track> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Track.MoshiJsonAdapter(moshi);
+    }
+
 }

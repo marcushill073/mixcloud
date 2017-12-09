@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import { AppRegistry, WebView, AsyncStorage, NativeModules, DeviceEventEmitter } from 'react-native';
+import { AppRegistry, WebView, NativeModules } from 'react-native';
 import JSDispatchRequestModule from 'JSDispatchRequestModule'
 
 const CLIENT_ID = '85yqWZ5zrbRGnN2tkA';
@@ -19,16 +19,6 @@ export default class mixcloud extends Component {
  // Opens the url in the default browser
 
   }
-
- componentDidMount(){
-   DeviceEventEmitter.addListener('JSDispatchRequestModule', (event) => {
-     JSDispatchRequestModule.handleRequest(event);
-   });
- }
-
- componentWillUnmount() {
- }
-
 
   render() {
     let token = false;
@@ -58,8 +48,7 @@ export default class mixcloud extends Component {
           .then((response) => response.json())
           .then((body) => {
             if(!token) {
-              AsyncStorage.setItem('@Mixcloud:token', body.access_token);
-              NativeModules.JSViewHelperModule.startNativeView('home');
+              NativeModules.JSViewHelperModule.startNativeView('home', body.access_token);
               token=true;
             }
           })

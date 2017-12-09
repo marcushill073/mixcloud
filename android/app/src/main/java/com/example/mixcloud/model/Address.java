@@ -1,19 +1,18 @@
 package com.example.mixcloud.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
-import io.realm.RealmModel;
-import io.realm.annotations.Ignore;
 
 @AutoValue
-public abstract class Address implements RealmModel {
+public abstract class Address {
 
     public abstract State state();
     public abstract Country country();
     public abstract String postcode();
-
-    @Ignore
-    public String sessionId;
 
     public static Builder builder() {
         return new AutoValue_Address.Builder();
@@ -29,5 +28,9 @@ public abstract class Address implements RealmModel {
         public abstract Builder postcode(String value);
 
         public abstract Address build();
+    }
+
+    public static JsonAdapter<Address> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Address.MoshiJsonAdapter(moshi);
     }
 }

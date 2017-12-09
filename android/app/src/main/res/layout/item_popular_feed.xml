@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="track"
+            type="com.example.mixcloud.model.Track" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="6dp">
+
+        <FrameLayout
+            android:id="@+id/cover"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
+                android:src="@{track.pictures().large()}" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_iconmonstr_video_15" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:lines="2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/cover"
+            android:text="@{track.name()}" />
+
+        <ImageView
+            android:id="@+id/user_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/cover"
+            android:layout_below="@id/name"
+            android:scaleType="fitXY"
+            android:src="@{track.user().pictures().thumbnail()}" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/user_image"
+            android:layout_alignTop="@id/user_image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:text="@{track.user().name()}"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/audio_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_name"
+            android:layout_alignLeft="@id/user_name"
+            app:srcCompat="@drawable/ic_iconmonstr_media_control_48"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/audio_length"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/audio_image"
+            android:layout_alignTop="@id/audio_image"
+            android:layout_alignBottom="@id/audio_image"
+            android:layout_below="@id/user_name"
+            android:text="@{String.valueOf(track.audioLength())}" />
+
+    </RelativeLayout>
+</layout>

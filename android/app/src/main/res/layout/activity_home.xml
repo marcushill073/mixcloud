@@ -15,11 +15,10 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/colorPrimary">
         <!-- The main content view -->
-        <FrameLayout
-            android:id="@+id/content_frame"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/feed"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"/>
         <!-- The navigation drawer -->
         <ListView
             android:id="@+id/left_drawer"

@@ -17,17 +17,20 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@{user.getPictures().getSmall()}"/>
+            android:src="@{user.pictures().medium()}"
+            android:scaleType="center"/>
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/user_avatar"
+            android:gravity="center_horizontal"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:textSize="24sp"
-            android:text="@{user.getUsername()}"/>
+            android:layout_marginBottom="10dp"
+            android:textSize="22sp"
+            android:text="@{user.username()}"/>
 
         <TextView
             android:id="@+id/user_membership"
@@ -42,16 +45,17 @@
             android:id="@+id/favourite_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_toRightOf="@id/user_avatar"
             android:layout_below="@id/user_membership"
-            android:text="@{@string/favourites + user.getFavoriteCount()}"/>
+            android:text="@{@string/favourites + user.favoriteCount()}"/>
         <TextView
             android:id="@+id/followed_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/user_avatar"
             android:layout_below="@id/favourite_count"
-            android:text="@{@string/followed + user.getFollowerCount()}"/>
+            android:text="@{@string/followed + user.followerCount()}"/>
 
         <TextView
             android:id="@+id/following_count"
@@ -59,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/user_avatar"
             android:layout_below="@id/followed_count"
-            android:text="@{@string/following + user.getFollowingCount()}"/>
+            android:text="@{@string/following + user.followingCount()}"/>
 
     </RelativeLayout>
 </layout>

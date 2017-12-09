@@ -1,34 +1,20 @@
 package com.example.mixcloud.modules;
 
-import android.view.View;
 
-import com.example.mixcloud.MixCloudApp;
 import com.example.mixcloud.activities.HomeActivity;
-import com.example.mixcloud.activities.MainActivity;
+import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.User;
-import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.ReactNativeHost;
 
-import javax.inject.Singleton;
+import java.util.List;
 
 import dagger.Component;
-import io.realm.RealmResults;
+import rx.Observable;
 
-@Singleton
-@Component (modules = {ReactManagerInstanceModule.class, AppModule.class, UserModule.class})
+@Component (modules = {ServiceModule.class})
 public interface DataComponent {
-    void inject(MixCloudApp mixCloudApp);
+
+    RestServiceAPI getRestAPI();
 
     void inject(HomeActivity homeActivity);
-
-    void inject(MainActivity mainActivity);
-
-    void inject(UserModule userModule);
-
-    ReactNativeHost getReactNativeHost();
-
-    View fetchUser();
-
-    MixCloudApp providesApplication();
-
 }

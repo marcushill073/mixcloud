@@ -1,122 +1,66 @@
 package com.example.mixcloud.model;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
+@AutoValue
+public abstract class User {
 
-public class User extends RealmObject {
+    public abstract int cloudcastCount();
 
-    @Ignore
-    private int sessionId;
+    public abstract int favoriteCount();
 
-    private int cloudcastCount;
-    private int favoriteCount;
-    private int followerCount;
-    private int followingCount;
-    private boolean isPremium;
-    private String key;
-    private String name;
-    private Pictures pictures;
-    private String url;
-    private String username;
+    public abstract int followerCount();
 
-//    private RealmList<PlayList> playLists;
+    public abstract int followingCount();
 
+    public abstract boolean isPremium();
 
-    public int getSessionId() {
-        return sessionId;
+    public abstract String key();
+
+    public abstract String name();
+
+    public abstract Pictures pictures();
+
+    public abstract String url();
+
+    public abstract String username();
+
+    public static Builder builder() {
+        return new AutoValue_User.Builder();
     }
 
-    public void setSessionId(int sessionId) {
-        this.sessionId = sessionId;
+    @AutoValue.Builder
+    public abstract static class Builder {
+
+        public abstract Builder cloudcastCount(int value);
+
+        public abstract Builder favoriteCount(int value);
+
+        public abstract Builder followerCount(int value);
+
+        public abstract Builder followingCount(int value);
+
+        public abstract Builder isPremium(boolean value);
+
+        public abstract Builder key(String value);
+
+        public abstract Builder name(String value);
+
+        public abstract Builder pictures(Pictures value);
+
+        public abstract Builder url(String value);
+
+        public abstract Builder username(String value);
+
+        public abstract User build();
     }
 
-    public int getCloudcastCount() {
-        return cloudcastCount;
+    public static JsonAdapter<User> jsonAdapter(Moshi moshi) {
+        return new AutoValue_User.MoshiJsonAdapter(moshi);
     }
 
-    public void setCloudcastCount(int cloudcastCount) {
-        this.cloudcastCount = cloudcastCount;
-    }
-
-    public int getFavoriteCount() {
-        return favoriteCount;
-    }
-
-    public void setFavoriteCount(int favoriteCount) {
-        this.favoriteCount = favoriteCount;
-    }
-
-    public int getFollowerCount() {
-        return followerCount;
-    }
-
-    public void setFollowerCount(int followerCount) {
-        this.followerCount = followerCount;
-    }
-
-    public int getFollowingCount() {
-        return followingCount;
-    }
-
-    public void setFollowingCount(int followingCount) {
-        this.followingCount = followingCount;
-    }
-
-    public boolean isPremium() {
-        return isPremium;
-    }
-
-    public void setPremium(boolean premium) {
-        isPremium = premium;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Pictures getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(Pictures pictures) {
-        this.pictures = pictures;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-//    public RealmList<PlayList> getPlayLists() {
-//        return playLists;
-//    }
-//
-//    public void setPlayLists(RealmList<PlayList> playLists) {
-//        this.playLists = playLists;
-//    }
 }

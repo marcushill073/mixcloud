@@ -6,17 +6,17 @@ import com.google.gson.TypeAdapter;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import java.util.List;
-
 @AutoValue
-public abstract class PlayList  {
+public abstract class Tag {
 
     public abstract String name();
 
-    public abstract List<Track> tracks();
+    public abstract String key();
+
+    public abstract String url();
 
     public static Builder builder() {
-        return new AutoValue_PlayList.Builder();
+        return new AutoValue_Tag.Builder();
     }
 
     @AutoValue.Builder
@@ -24,14 +24,16 @@ public abstract class PlayList  {
 
         public abstract Builder name(String value);
 
-        public abstract Builder tracks(List<Track> value);
+        public abstract Builder key(String value);
 
-        public abstract PlayList builder();
+        public abstract Builder url(String value);
+
+        public abstract Tag build();
 
     }
 
-    public static JsonAdapter<PlayList> jsonAdapter(Moshi moshi) {
-        return new AutoValue_PlayList.MoshiJsonAdapter(moshi);
+    public static JsonAdapter<Tag> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Tag.MoshiJsonAdapter(moshi);
     }
 
 }
