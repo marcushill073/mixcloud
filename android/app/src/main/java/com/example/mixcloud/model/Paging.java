@@ -3,6 +3,7 @@ package com.example.mixcloud.model;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -12,6 +13,11 @@ import javax.annotation.Nullable;
 public abstract class Paging {
 
     @Nullable
+    @Json(name="previous")
+    public abstract String previous();
+
+    @Nullable
+    @Json(name="next")
     public abstract String next();
 
     public static Builder builder() {
@@ -20,6 +26,9 @@ public abstract class Paging {
 
     @AutoValue.Builder
     public abstract static class Builder {
+
+        public abstract Builder previous(String value);
+
         public abstract Builder next(String value);
 
         public abstract Paging build();

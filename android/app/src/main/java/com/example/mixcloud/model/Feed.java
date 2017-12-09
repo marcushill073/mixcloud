@@ -20,6 +20,8 @@ public abstract class Feed {
 
     public abstract List<Track> data();
 
+    public abstract Builder toBuilder();
+
     public static Builder builder() {
         return new AutoValue_Feed.Builder();
     }

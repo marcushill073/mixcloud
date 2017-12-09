@@ -14,9 +14,7 @@ import rx.Observable;
 @Component (modules = {ServiceModule.class})
 public interface DataComponent {
 
-    Observable<User> fetchUser();
-
-    Observable<Feed> fetchPopularFeed();
+    RestServiceAPI getRestAPI();
 
     void inject(HomeActivity homeActivity);
 }

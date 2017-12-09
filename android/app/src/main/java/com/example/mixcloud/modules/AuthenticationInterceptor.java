@@ -28,8 +28,13 @@ class AuthenticationInterceptor implements Interceptor {
 
             String token = context.getSharedPreferences(context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE)
                     .getString(context.getResources().getString(R.string.token), null);
-            Request.Builder builder = original.newBuilder().url(original.url() + "?access_token=" + token);
 
+            Request.Builder builder;
+            if(original.url().toString().contains("?")) {
+                builder= original.newBuilder().url(original.url().toString().replace("?", "?access_token=" + token + "&"));
+            } else {
+                builder = original.newBuilder().url(original.url() + "?access_token=" + token);
+            }
             original = builder.build();
         }
         return chain.proceed(original);

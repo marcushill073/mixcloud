@@ -8,6 +8,7 @@ import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface RestService {
@@ -17,4 +18,7 @@ public interface RestService {
 
     @GET("popular")
     Observable<Feed> fetchPopularFeed();
+
+    @GET("popular")
+    Observable<Feed> fetchNextPopularFeedPage(@Query("limit") int limit, @Query("offset") int offset);
 }
