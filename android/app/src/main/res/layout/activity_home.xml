@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.mixcloud.activities.HomeActivity">
 
     <include layout="@layout/item_toolbar" />
@@ -15,10 +16,13 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/colorPrimary">
         <!-- The main content view -->
-        <android.support.v7.widget.RecyclerView
+
+        <android.support.v4.view.ViewPager
             android:id="@+id/feed"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginBottom="?attr/actionBarSize"/>
         <!-- The navigation drawer -->
         <ListView
             android:id="@+id/left_drawer"
@@ -32,4 +36,15 @@
             android:padding="6dp" />
 
     </android.support.v4.widget.DrawerLayout>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:foregroundGravity="center"
+        android:background="@color/colorPrimary"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
+
+
 </android.support.design.widget.CoordinatorLayout>

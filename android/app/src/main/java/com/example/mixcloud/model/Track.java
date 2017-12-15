@@ -1,5 +1,6 @@
 package com.example.mixcloud.model;
 
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -12,7 +13,7 @@ import com.squareup.moshi.Moshi;
 import java.util.List;
 
 @AutoValue
-public abstract class Track {
+public abstract class Track implements Parcelable {
 
     public abstract String key();
 

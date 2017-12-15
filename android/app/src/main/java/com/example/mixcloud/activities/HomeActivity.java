@@ -6,8 +6,11 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +25,8 @@ import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
+import com.example.mixcloud.adapters.FeedPagerAdapter;
+import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.User;
@@ -37,38 +42,27 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener {
+public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
 
     @Inject
     public RestServiceAPI restServiceAPI;
+
+    @BindView(R.id.feed)
+    public ViewPager viewPager;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+
     private ViewDataBinding binding;
     private User mUser;
-    private FeedAdapter feedAdapter;
-    private boolean loading;
-    private RecyclerView recyclerView;
-
-
-    private final ViewTreeObserver.OnScrollChangedListener listener = new ViewTreeObserver.OnScrollChangedListener() {
-
-        @Override
-        public void onScrollChanged() {
-
-            if (!loading) {
-                loading = true;
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int position = linearLayoutManager.findLastVisibleItemPosition();
-                feedAdapter.notifyLastVisiblePosition(position);
-            }
-
-        }
-    };
-
+    private FeedPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +74,17 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 .build();
 
         dataComponent.inject(this);
+        ButterKnife.bind(this);
+        adapter = new FeedPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(this);
 
+        setupTabViews();
 
         restServiceAPI.fetchUser().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((user) -> {
+                .subscribe(user -> {
                     mUser = user;
                     binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.item_drawer_header, null, false);
                     binding.setVariable(BR.user, mUser);
@@ -94,20 +94,11 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                     DrawerAdapter adapter = new DrawerAdapter(this);
                     listView.addHeaderView(binding.getRoot());
                     listView.setAdapter(adapter);
+                }, error -> {
+                    error.printStackTrace();
                 });
 
-        Observable<Feed> popularFeed = restServiceAPI.fetchPopularFeed();
-        popularFeed.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(feed -> {
-                    recyclerView = (RecyclerView) HomeActivity.this.findViewById(R.id.feed);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-                    feedAdapter = new FeedAdapter(feed, this);
-                    recyclerView.setAdapter(feedAdapter);
-                    recyclerView.getViewTreeObserver().addOnScrollChangedListener(listener);
-
-                });
-
+        fetchFeedDetails(Feed.Type.POPULAR);
         findViewById(R.id.menu_button).setOnClickListener(view -> {
             DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
@@ -124,27 +115,85 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         Picasso.with(view.getContext()).load(url).into(view);
     }
 
-    @Override
-    public void onGetNextPage(String url) {
-        try {
-            recyclerView.getViewTreeObserver().removeOnScrollChangedListener(listener);
-            restServiceAPI.fetchNextFeedPage(url)
-            .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(next -> {
-                        feedAdapter.addPage(next);
-                        feedAdapter.notifyDataSetChanged();
-                        loading = false;
-                        recyclerView.getViewTreeObserver().addOnScrollChangedListener(listener);
-                    });
+    private void fetchFeedDetails(Feed.Type type) {
+        Observable<Feed> popularFeed = restServiceAPI.fetchPopularFeed(type.getValue());
+        popularFeed.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(feed -> {
+                    FeedFragment feedFragment = adapter.getFeedFragment(type.ordinal());
+                    feedFragment.setFeed(feed);
+                }, error -> {
+                    error.printStackTrace();
+                });
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    }
+
+
+    @Override
+    public void onGetNextPage(Feed.Type type, String url) {
+        FeedFragment feedFragment = adapter.getFeedFragment(type.ordinal());
+        if (feedFragment != null) {
+            try {
+
+                feedFragment.setLoading(true);
+                restServiceAPI.fetchNextFeedPage(type.getValue(), url)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(next -> {
+                            feedFragment.addFeed(next);
+                            feedFragment.setLoading(false);
+                        }, error -> {
+                            error.printStackTrace();
+                            feedFragment.setLoading(false);
+                        });
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void setupTabViews() {
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            View view = LayoutInflater.from(this).inflate(R.layout.item_tab, null);
+            AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.tab_image);
+            switch (i) {
+                case 0:
+                    imageView.setImageResource(R.drawable.ic_iconmonstr_whats_hot_1);
+                    break;
+                case 1:
+                    imageView.setImageResource(R.drawable.ic_iconmonstr_favorite_2);
+                    break;
+                case 2:
+                    imageView.setImageResource(R.drawable.ic_iconmonstr_star_5);
+                    break;
+            }
+
+            tab.setCustomView(imageView);
         }
     }
 
     @Override
-    public void notLoading() {
-        loading = false;
+    public void onTabSelected(TabLayout.Tab tab) {
+
+        if (adapter.getFeedFragment(tab.getPosition()) == null ||
+                adapter.getFeedFragment(tab.getPosition()).isEmpty()) {
+            Feed.Type type = Feed.Type.values()[tab.getPosition()];
+            fetchFeedDetails(type);
+        }
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }

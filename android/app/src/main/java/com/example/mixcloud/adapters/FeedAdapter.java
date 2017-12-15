@@ -19,13 +19,15 @@ import java.util.List;
 public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     private final OnGetNextPageListener listener;
+    private final Feed.Type type;
     private Feed feed;
     private String nextPath;
-    private final int pageSize;
+    private final int pageSize = 20;
 
-    public FeedAdapter(Feed feed, OnGetNextPageListener listener) {
-        this.feed = feed;
-        pageSize = feed.data().size();
+    public FeedAdapter(Feed.Type type, OnGetNextPageListener listener) {
+        this.type = type;
+        this.feed = Feed.builder().data(new ArrayList<>())
+                .paging(Paging.builder().next("").build()).build();
         this.listener = listener;
         nextPath  = feed.paging().next();
     }
@@ -57,14 +59,16 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     public void notifyLastVisiblePosition(int position) {
         if ((feed.data().size() - position) <= pageSize && feed.paging().next() != null) {
-            listener.onGetNextPage(nextPath);
-        } else {
-            listener.notLoading();
+            listener.onGetNextPage(type, nextPath);
         }
     }
 
+    public void setFeed(Feed feed) {
+        this.feed = feed;
+        nextPath = feed.paging().next();
+    }
+
     public interface OnGetNextPageListener {
-        void onGetNextPage(String url);
-        void notLoading();
+        void onGetNextPage(Feed.Type type, String url);
     }
 }

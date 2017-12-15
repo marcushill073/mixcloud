@@ -12,7 +12,7 @@ public interface RestServiceAPI {
 
     Observable<User> fetchUser();
 
-    Observable<Feed> fetchPopularFeed();
+    Observable<Feed> fetchPopularFeed(String type);
 
-    Observable<Feed> fetchNextFeedPage(String url) throws MalformedURLException;
+    Observable<Feed> fetchNextFeedPage(String type, String url) throws MalformedURLException;
 }

@@ -1,5 +1,7 @@
 package com.example.mixcloud.model;
 
+import android.os.Parcelable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -7,7 +9,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 @AutoValue
-public abstract class User {
+public abstract class User implements Parcelable {
 
     public abstract int cloudcastCount();
 
