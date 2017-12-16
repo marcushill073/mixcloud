@@ -9,7 +9,6 @@ import com.example.mixcloud.model.User;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import dagger.Provides;
 import rx.Observable;
 
 public class ServiceModuleImpl implements RestServiceAPI {
@@ -29,27 +28,65 @@ public class ServiceModuleImpl implements RestServiceAPI {
     }
 
     @Override
-    public Observable<Feed> fetchPopularFeed(String type) {
-        return restService.fetchPopularFeed(type);
+    public Observable<Feed> fetchHomeFeed(String type) {
+        return restService.fetchHomeFeed(type);
     }
 
     @Override
-    public synchronized Observable<Feed> fetchNextFeedPage(String type, String path) throws MalformedURLException {
-        URL url = new URL(path);
-        Log.d("next page", path);
+    public synchronized Observable<Feed> fetchNextHomePage(String type, String path) throws MalformedURLException {
+        GetOffSet getOffSet = new GetOffSet(path).invoke();
+        int limit = getOffSet.getLimit();
+        int offset = getOffSet.getOffset();
+        return restService.fetchHomeFeedPage(type, limit, offset);
 
-        String[] query = url.getQuery().split("&");
-        int offset = 0;
-        int limit = 0;
-        for (int i = 0; i < query.length; i++) {
-            if (query[i].split("=")[0].contains("limit")) {
-                limit = Integer.valueOf(query[i].split("=")[1]);
-            }
-            if (query[i].split("=")[0].contains("offset")) {
-                offset = Integer.valueOf(query[i].split("=")[1]);
-            }
+    }
+
+    @Override
+    public Observable<Feed> fetchFeed(String user, String navigation) {
+        return restService.fetchFeed(user, navigation);
+    }
+
+    @Override
+    public Observable<Feed> fetchFeedPage(String user, String navigation, String url) throws MalformedURLException {
+        GetOffSet getOffSet = new GetOffSet(url).invoke();
+        int limit = getOffSet.getLimit();
+        int offset = getOffSet.getOffset();
+        return restService.fetchNextFeedPage(user, navigation, limit, offset);
+    }
+
+    private class GetOffSet {
+        private String path;
+        private int offset;
+        private int limit;
+
+        public GetOffSet(String path) {
+            this.path = path;
         }
-        return restService.fetchNextPopularFeedPage(type, limit, offset);
 
+        public int getOffset() {
+            return offset;
+        }
+
+        public int getLimit() {
+            return limit;
+        }
+
+        public GetOffSet invoke() throws MalformedURLException {
+            URL url = new URL(path);
+            Log.d("next page", path);
+
+            String[] query = url.getQuery().split("&");
+            offset = 0;
+            limit = 0;
+            for (int i = 0; i < query.length; i++) {
+                if (query[i].split("=")[0].contains("limit")) {
+                    limit = Integer.valueOf(query[i].split("=")[1]);
+                }
+                if (query[i].split("=")[0].contains("offset")) {
+                    offset = Integer.valueOf(query[i].split("=")[1]);
+                }
+            }
+            return this;
+        }
     }
 }

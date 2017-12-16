@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,28 +12,15 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.example.mixcloud.R;
-import com.example.mixcloud.activities.HomeActivity;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.model.Feed;
-import com.example.mixcloud.modules.DaggerDataComponent;
-import com.example.mixcloud.modules.DataComponent;
-import com.example.mixcloud.modules.RestServiceAPI;
-import com.example.mixcloud.modules.ServiceModule;
-import com.example.mixcloud.modules.ServiceModuleImpl;
-
-import java.net.MalformedURLException;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import com.example.mixcloud.model.Navigation;
+import com.example.mixcloud.model.Type;
 
 public class FeedFragment extends Fragment {
 
     public static final String FEED_TYPE = ".feed_type";
+    public static final String FEED_NAV = ".feed_nav";
     public static final String FEED = ".feed";
     private FeedAdapter feedAdapter;
 
@@ -44,7 +30,6 @@ public class FeedFragment extends Fragment {
 
     private boolean loading;
     private RecyclerView recyclerView;
-    private Feed.Type type;
 
 
     private final ViewTreeObserver.OnScrollChangedListener listener = new ViewTreeObserver.OnScrollChangedListener() {
@@ -66,8 +51,15 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        this.type = (Feed.Type) getArguments().getSerializable(FEED_TYPE);
-        feedAdapter = new FeedAdapter(type, (FeedAdapter.OnGetNextPageListener) getActivity(), (FeedAdapter.OnPlayListener) getActivity());
+        Type type = (Type) getArguments().getSerializable(FEED_TYPE);
+
+        if(type != null) {
+            feedAdapter = new FeedAdapter(type, (FeedAdapter.OnGetNextPageListener) getParentFragment(), (FeedAdapter.OnPlayListener) getActivity());
+
+        } else {
+            Navigation nav = (Navigation) getArguments().getSerializable(FEED_NAV);
+            feedAdapter = new FeedAdapter(nav, (FeedAdapter.OnGetNextPageListener) getParentFragment(), (FeedAdapter.OnPlayListener) getActivity());
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(feedAdapter);
         return view;

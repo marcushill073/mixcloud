@@ -1,18 +1,13 @@
 package com.example.mixcloud.modules;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapterFactory;
-import com.ryanharter.auto.value.moshi.MoshiAdapterFactory;
 import com.squareup.moshi.Moshi;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class ServiceGenerator {

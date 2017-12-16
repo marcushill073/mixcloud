@@ -47,6 +47,7 @@ export default class mixcloud extends Component {
           fetch('https://www.mixcloud.com/oauth/access_token?client_id=' + CLIENT_ID + '&redirect_uri=http://www.example.com&client_secret=' + CLIENT_SECRET, options)
           .then((response) => response.json())
           .then((body) => {
+	    console.log(body);
             if(!token) {
               NativeModules.JSViewHelperModule.startNativeView('home', body.access_token);
               token=true;

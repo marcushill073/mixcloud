@@ -3,20 +3,20 @@ package com.example.mixcloud.model;
 import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 @AutoValue
-public abstract class Feed implements Parcelable{
+public abstract class Feed implements Parcelable {
 
     @Nullable
     public abstract Paging paging();
@@ -41,19 +41,5 @@ public abstract class Feed implements Parcelable{
 
     public static JsonAdapter<Feed> jsonAdapter(Moshi moshi) {
         return new AutoValue_Feed.MoshiJsonAdapter(moshi);
-    }
-
-    public enum Type implements Serializable {
-        POPULAR("popular"), HOT("popular/hot"), NEW("new");
-
-        private final String value;
-
-        Type(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
     }
 }

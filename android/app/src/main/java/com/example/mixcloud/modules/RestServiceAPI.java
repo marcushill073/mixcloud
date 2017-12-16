@@ -5,14 +5,17 @@ import com.example.mixcloud.model.User;
 
 import java.net.MalformedURLException;
 
-import dagger.Component;
 import rx.Observable;
 
 public interface RestServiceAPI {
 
     Observable<User> fetchUser();
 
-    Observable<Feed> fetchPopularFeed(String type);
+    Observable<Feed> fetchHomeFeed(String type);
 
-    Observable<Feed> fetchNextFeedPage(String type, String url) throws MalformedURLException;
+    Observable<Feed> fetchNextHomePage(String type, String url) throws MalformedURLException;
+
+    Observable<Feed> fetchFeed(String user, String navigation);
+
+    Observable<Feed> fetchFeedPage(String user, String navigation, String url) throws MalformedURLException;
 }

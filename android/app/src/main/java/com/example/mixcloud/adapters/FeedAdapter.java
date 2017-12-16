@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
 import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
+import com.example.mixcloud.model.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +21,22 @@ import java.util.List;
 public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     private final OnGetNextPageListener onGetNextPageListener;
-    private final Feed.Type type;
+    private final Object type;
     private final OnPlayListener onPlayListener;
     private Feed feed;
     private String nextPath;
     private final int pageSize = 20;
 
-    public FeedAdapter(Feed.Type type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
+    public FeedAdapter(Type type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
+        this.type = type;
+        this.feed = Feed.builder().data(new ArrayList<>())
+                .paging(Paging.builder().next("").build()).build();
+        this.onGetNextPageListener = onGetNextPageListener;
+        this.onPlayListener = onPlayListener;
+        nextPath = feed.paging().next();
+    }
+
+    public FeedAdapter(Navigation type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
         this.type = type;
         this.feed = Feed.builder().data(new ArrayList<>())
                 .paging(Paging.builder().next("").build()).build();
@@ -71,7 +82,7 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
     }
 
     public interface OnGetNextPageListener {
-        void onGetNextPage(Feed.Type type, String url);
+        void onGetNextPage(Object type, String url);
     }
 
     public interface OnPlayListener {

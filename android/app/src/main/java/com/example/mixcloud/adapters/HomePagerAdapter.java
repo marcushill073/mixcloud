@@ -7,23 +7,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;
-import com.example.mixcloud.model.Navigation;
+import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Type;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FeedPagerAdapter extends FragmentPagerAdapter {
+public class HomePagerAdapter extends FragmentPagerAdapter {
 
     private static Map<Integer, FeedFragment> map;
 
-    public FeedPagerAdapter(FragmentManager fm) {
+    public HomePagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public int getCount() {
-        return Navigation.values().length;
+        return Type.values().length;
     }
 
     @Override
