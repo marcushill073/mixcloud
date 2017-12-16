@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mixcloud.BR;
@@ -16,20 +15,23 @@ import com.example.mixcloud.model.Track;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
-    private final OnGetNextPageListener listener;
+    private final OnGetNextPageListener onGetNextPageListener;
     private final Feed.Type type;
+    private final OnPlayListener onPlayListener;
     private Feed feed;
     private String nextPath;
     private final int pageSize = 20;
 
-    public FeedAdapter(Feed.Type type, OnGetNextPageListener listener) {
+    public FeedAdapter(Feed.Type type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
         this.type = type;
         this.feed = Feed.builder().data(new ArrayList<>())
                 .paging(Paging.builder().next("").build()).build();
-        this.listener = listener;
-        nextPath  = feed.paging().next();
+        this.onGetNextPageListener = onGetNextPageListener;
+        this.onPlayListener = onPlayListener;
+        nextPath = feed.paging().next();
     }
 
     @Override
@@ -41,7 +43,7 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
     @Override
     public void onBindViewHolder(DataBinderHolder holder, int position) {
         holder.getViewDataBinding().setVariable(BR.track, feed.data().get(position));
-
+        holder.getViewDataBinding().setVariable(BR.listener, onPlayListener);
 
     }
 
@@ -52,14 +54,14 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     public void addPage(Feed nextFeed) {
         nextPath = nextFeed.paging().next();
-            List<Track> tracks = new ArrayList<>(nextFeed.data());
+        List<Track> tracks = new ArrayList<>(nextFeed.data());
         this.feed.data().addAll(tracks);
 
     }
 
     public void notifyLastVisiblePosition(int position) {
         if ((feed.data().size() - position) <= pageSize && feed.paging().next() != null) {
-            listener.onGetNextPage(type, nextPath);
+            onGetNextPageListener.onGetNextPage(type, nextPath);
         }
     }
 
@@ -70,5 +72,10 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     public interface OnGetNextPageListener {
         void onGetNextPage(Feed.Type type, String url);
+    }
+
+    public interface OnPlayListener {
+
+        void play(Track track);
     }
 }

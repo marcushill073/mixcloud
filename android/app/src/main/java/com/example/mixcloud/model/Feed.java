@@ -44,7 +44,7 @@ public abstract class Feed implements Parcelable{
     }
 
     public enum Type implements Serializable {
-        POPULAR("popular"), HOT("hot"), New("new");
+        POPULAR("popular"), HOT("popular/hot"), NEW("new");
 
         private final String value;
 

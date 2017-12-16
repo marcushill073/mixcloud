@@ -67,7 +67,7 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         this.type = (Feed.Type) getArguments().getSerializable(FEED_TYPE);
-        feedAdapter = new FeedAdapter(type, (FeedAdapter.OnGetNextPageListener) getActivity());
+        feedAdapter = new FeedAdapter(type, (FeedAdapter.OnGetNextPageListener) getActivity(), (FeedAdapter.OnPlayListener) getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(feedAdapter);
         return view;
@@ -95,6 +95,7 @@ public class FeedFragment extends Fragment {
 
     public void setFeed(Feed feed) {
         feedAdapter.setFeed(feed);
+        feedAdapter.notifyDataSetChanged();
     }
 
     public boolean isEmpty() {

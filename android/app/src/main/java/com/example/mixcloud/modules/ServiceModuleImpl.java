@@ -41,9 +41,13 @@ public class ServiceModuleImpl implements RestServiceAPI {
         String[] query = url.getQuery().split("&");
         int offset = 0;
         int limit = 0;
-        if (query.length == 3) {
-            limit = Integer.valueOf(query[1].split("=")[1]);
-            offset = Integer.valueOf(query[2].split("=")[1]);
+        for (int i = 0; i < query.length; i++) {
+            if (query[i].split("=")[0].contains("limit")) {
+                limit = Integer.valueOf(query[i].split("=")[1]);
+            }
+            if (query[i].split("=")[0].contains("offset")) {
+                offset = Integer.valueOf(query[i].split("=")[1]);
+            }
         }
         return restService.fetchNextPopularFeedPage(type, limit, offset);
 

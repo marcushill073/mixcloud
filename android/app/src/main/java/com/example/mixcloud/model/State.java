@@ -3,7 +3,7 @@ package com.example.mixcloud.model;
 
 enum State {
 
-    NY("New York"), DC("Washington");
+    NY("NEW York"), DC("Washington");
 
     private final String state;
 

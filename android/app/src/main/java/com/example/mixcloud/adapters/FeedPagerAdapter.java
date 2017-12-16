@@ -23,12 +23,11 @@ import static com.example.mixcloud.model.Feed.Type.*;
 public class FeedPagerAdapter extends FragmentPagerAdapter {
     private final FragmentManager fm;
 
-    private Map<Integer,FeedFragment> map;
+    private static Map<Integer, FeedFragment> map;
 
     public FeedPagerAdapter(FragmentManager fm) {
         super(fm);
         this.fm = fm;
-        this.map = new HashMap<>();
     }
 
     @Override
@@ -38,8 +37,11 @@ public class FeedPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        if (map == null) {
+            map = new HashMap<>();
+        }
         FeedFragment fragment = null;
-        if(map.get(position) == null) {
+        if (map.get(position) == null) {
             fragment = new FeedFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable(FeedFragment.FEED_TYPE, Type.values()[position]);

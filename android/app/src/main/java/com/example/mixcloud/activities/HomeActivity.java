@@ -35,6 +35,7 @@ import com.example.mixcloud.modules.DataComponent;
 import com.example.mixcloud.modules.RestServiceAPI;
 import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
@@ -50,7 +51,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
+public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener, FeedAdapter.OnPlayListener {
 
     @Inject
     public RestServiceAPI restServiceAPI;
@@ -82,6 +83,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
         setupTabViews();
 
+        viewPager.setCurrentItem(0);
         restServiceAPI.fetchUser().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
@@ -195,5 +197,11 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void play(Track track) {
+        Gson gson = new Gson();
+        Log.d(HomeActivity.class.getSimpleName(), gson.toJson(track).toString());
     }
 }
