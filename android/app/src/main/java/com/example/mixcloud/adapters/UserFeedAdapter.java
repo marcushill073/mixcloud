@@ -13,25 +13,25 @@ import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.Type;
+import com.example.mixcloud.model.UserData;
 import com.example.mixcloud.model.UserFeed;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
+public class UserFeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     private final OnGetNextPageListener onGetNextPageListener;
-    private final Type type;
-    private final UserFeedAdapter.OnPlayListener onPlayListener;
-    private Feed feed;
+    private final Navigation type;
+    private final OnPlayListener onPlayListener;
+    private List<Track> feed;
     private String nextPath;
     private final int pageSize = 20;
 
-    public FeedAdapter(Type type, OnGetNextPageListener onGetNextPageListener, UserFeedAdapter.OnPlayListener onPlayListener) {
+    public UserFeedAdapter(Navigation type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
         this.type = type;
-        this.feed = Feed.builder().data(new ArrayList<>())
-                .paging(Paging.builder().next("").build()).build();
+        this.feed = new ArrayList<>();
         this.onGetNextPageListener = onGetNextPageListener;
         this.onPlayListener = onPlayListener;
     }
@@ -44,39 +44,50 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
     @Override
     public void onBindViewHolder(DataBinderHolder holder, int position) {
-        holder.getViewDataBinding().setVariable(BR.track, feed.data().get(position));
+        holder.getViewDataBinding().setVariable(BR.track, feed.get(position));
         holder.getViewDataBinding().setVariable(BR.listener, onPlayListener);
 
     }
 
     @Override
     public int getItemCount() {
-        return feed.data().size();
+        return feed.size();
     }
 
-    public void addPage(Feed nextFeed) {
+    public void addPage(UserFeed nextFeed) {
         nextPath = nextFeed.paging().next();
-        List<Track> tracks = new ArrayList<>(nextFeed.data());
-        this.feed.data().addAll(tracks);
-
+        for(UserData userData: nextFeed.data()) {
+            if(userData.cloudCasts() != null) {
+                List<Track> tracks = new ArrayList<>(userData.cloudCasts());
+                this.feed.addAll(tracks);
+            }
+        }
     }
 
     public void notifyLastVisiblePosition(int position) {
-        if ((feed.data().size() - position) <= pageSize && feed.paging().next() != null) {
+        if ((feed.size() - position) <= pageSize && nextPath != null) {
             onGetNextPageListener.onGetNextPage(type, nextPath);
         }
     }
 
-    public void setFeed(Feed feed) {
-        this.feed = feed;
+    public void setFeed(UserFeed feed) {
+        for(UserData userData: feed.data()) {
+            if(userData.cloudCasts() != null) {
+                List<Track> tracks = new ArrayList<>(userData.cloudCasts());
+                this.feed.addAll(tracks);
+            }
+        }
         nextPath = feed.paging().next();
     }
 
-    public Feed getFeed() {
-        return feed;
+    public interface OnGetNextPageListener {
+        void onGetNextPage(Navigation type, String url);
     }
 
-    public interface OnGetNextPageListener {
-        void onGetNextPage(Type type, String url);
+    public interface OnPlayListener {
+
+        void play(Track track);
     }
+
+
 }

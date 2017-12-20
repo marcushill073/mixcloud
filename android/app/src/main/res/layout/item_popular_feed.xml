@@ -7,7 +7,7 @@
             type="com.example.mixcloud.model.Track" />
         <variable
             name="listener"
-            type="com.example.mixcloud.adapters.FeedAdapter.OnPlayListener"/>
+            type="com.example.mixcloud.adapters.UserFeedAdapter.OnPlayListener"/>
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

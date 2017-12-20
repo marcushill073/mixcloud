@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.User;
+import com.example.mixcloud.model.UserFeed;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,7 +20,6 @@ public class ServiceModuleImpl implements RestServiceAPI {
     public ServiceModuleImpl(Context context) {
         restService =
                 ServiceGenerator.createService(RestService.class, context);
-
     }
 
     @Override
@@ -42,12 +42,12 @@ public class ServiceModuleImpl implements RestServiceAPI {
     }
 
     @Override
-    public Observable<Feed> fetchFeed(String user, String navigation) {
+    public Observable<UserFeed> fetchFeed(String user, String navigation) {
         return restService.fetchFeed(user, navigation);
     }
 
     @Override
-    public Observable<Feed> fetchFeedPage(String user, String navigation, String url) throws MalformedURLException {
+    public Observable<UserFeed> fetchNextFeedPage(String user, String navigation, String url) throws MalformedURLException {
         GetOffSet getOffSet = new GetOffSet(url).invoke();
         int limit = getOffSet.getLimit();
         int offset = getOffSet.getOffset();

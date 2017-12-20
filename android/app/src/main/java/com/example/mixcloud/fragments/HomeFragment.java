@@ -58,21 +58,12 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Map<Integer, FeedFragment> map = null;
-        if (savedInstanceState == null) {
-            fetchFeedDetails(Type.POPULAR);
-        } else {
-            map = new HashMap<>();
-            for (int i = 0; i < Type.values().length; i++) {
-                map.put(i, savedInstanceState.getParcelable(Type.values()[i].getValue()));
-            }
-        }
-        adapter = new HomePagerAdapter(getChildFragmentManager(), map);
+        adapter = new HomePagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
         setupTabViews();
-
+        fetchFeedDetails(Type.POPULAR);
     }
 
     private void fetchFeedDetails(Type type) {
@@ -95,8 +86,7 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     }
 
     @Override
-    public void onGetNextPage(Object obj, String url) {
-        Type type = (Type) obj;
+    public void onGetNextPage(Type type, String url) {
         FeedFragment feedFragment = adapter.getFeedFragment(type.ordinal());
         if (feedFragment != null) {
             try {
@@ -151,18 +141,5 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Map<Integer, FeedFragment> map = adapter.getCurrentFeed();
-        Iterator<FeedFragment> values = map.values().iterator();
-        while (values.hasNext()) {
-            FeedFragment feedFragment = values.next();
-            outState.putParcelable(feedFragment.getType().getValue(), feedFragment.getFeed());
-        }
-
-    }
-
 
 }

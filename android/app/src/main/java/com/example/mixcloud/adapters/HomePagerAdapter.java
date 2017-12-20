@@ -19,9 +19,8 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
     private static Map<Integer, FeedFragment> map;
 
-    public HomePagerAdapter(FragmentManager fm, Map<Integer, FeedFragment> map) {
+    public HomePagerAdapter(FragmentManager fm) {
         super(fm);
-        this.map = map;
     }
 
     @Override

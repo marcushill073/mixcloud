@@ -18,14 +18,14 @@ import com.example.mixcloud.adapters.UserFeedAdapter;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.Type;
+import com.example.mixcloud.model.UserFeed;
 
-public class FeedFragment extends Fragment {
+import static com.example.mixcloud.fragments.FeedFragment.FEED_NAV;
 
-    public static final String FEED_TYPE = ".feed_type";
-    public static final String FEED_NAV = ".feed_nav";
-    public static final String FEED = ".feed";
-    private FeedAdapter feedAdapter;
-    private Parcelable mF;
+public class UserFeedFragment extends Fragment {
+
+
+    private UserFeedAdapter adapter;
 
     public void setLoading(boolean loading) {
         this.loading = loading;
@@ -34,16 +34,16 @@ public class FeedFragment extends Fragment {
     private boolean loading;
     private RecyclerView recyclerView;
 
-
+    private static final String TYPE = ".type";
     private final ViewTreeObserver.OnScrollChangedListener listener = new ViewTreeObserver.OnScrollChangedListener() {
 
         @Override
         public void onScrollChanged() {
 
-            if (!loading && feedAdapter != null && feedAdapter.getItemCount() != 0) {
+            if (!loading && adapter != null && adapter.getItemCount() != 0) {
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int position = linearLayoutManager.findLastVisibleItemPosition();
-                feedAdapter.notifyLastVisiblePosition(position);
+                adapter.notifyLastVisiblePosition(position);
             }
 
         }
@@ -54,12 +54,13 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        Type type = (Type) getArguments().getSerializable(FEED_TYPE);
 
-        feedAdapter = new FeedAdapter(type, (FeedAdapter.OnGetNextPageListener) getParentFragment(), (UserFeedAdapter.OnPlayListener) getActivity());
+
+        Navigation nav = (Navigation) getArguments().getSerializable(TYPE);
+        adapter = new UserFeedAdapter(nav, (UserFeedAdapter.OnGetNextPageListener) getActivity(), (UserFeedAdapter.OnPlayListener) getActivity());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(feedAdapter);
+        recyclerView.setAdapter(adapter);
         return view;
 
     }
@@ -76,28 +77,25 @@ public class FeedFragment extends Fragment {
         recyclerView.getViewTreeObserver().removeOnScrollChangedListener(listener);
     }
 
-    public void addFeed(@NonNull Feed feed) {
+    public void addFeed(@NonNull UserFeed feed) {
 
-        feedAdapter.addPage(feed);
-        feedAdapter.notifyDataSetChanged();
+        adapter.addPage(feed);
+        adapter.notifyDataSetChanged();
 
     }
 
-    public void setFeed(Feed feed) {
-        feedAdapter.setFeed(feed);
-        feedAdapter.notifyDataSetChanged();
+    public void setFeed(UserFeed feed) {
+        adapter.setFeed(feed);
+        adapter.notifyDataSetChanged();
     }
 
     public boolean isEmpty() {
-        return feedAdapter.getItemCount() == 0;
+        return adapter.getItemCount() == 0;
     }
 
     public Type getType() {
-        return getArguments().getParcelable(FEED_TYPE);
+        return getArguments().getParcelable(TYPE);
     }
 
-    public Parcelable getFeed() {
-        return feedAdapter.getFeed();
-    }
 }
  

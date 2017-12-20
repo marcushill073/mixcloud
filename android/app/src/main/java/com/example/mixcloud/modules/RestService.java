@@ -2,6 +2,7 @@ package com.example.mixcloud.modules;
 
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.User;
+import com.example.mixcloud.model.UserFeed;
 
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -21,8 +22,8 @@ public interface RestService {
     Observable<Feed> fetchHomeFeedPage(@Path("feed") String type, @Query("limit") int limit, @Query("offset") int offset);
 
     @GET("{user}/{feed}")
-    Observable<Feed> fetchFeed(@Path("user") String user, @Path("feed") String navigation);
+    Observable<UserFeed> fetchFeed(@Path("user") String user, @Path("feed") String navigation);
 
     @GET("{user}/{feed}")
-    Observable<Feed> fetchNextFeedPage(@Path("user") String user, @Path("feed") String navigation, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<UserFeed> fetchNextFeedPage(@Path("user") String user, @Path("feed") String navigation, @Query("limit") int limit, @Query("offset") int offset);
 }

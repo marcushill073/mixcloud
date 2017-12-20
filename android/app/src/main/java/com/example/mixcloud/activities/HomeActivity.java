@@ -20,13 +20,16 @@ import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
+import com.example.mixcloud.adapters.UserFeedAdapter;
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.fragments.HomeFragment;
+import com.example.mixcloud.fragments.UserFeedFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.model.User;
+import com.example.mixcloud.model.UserFeed;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
 import com.example.mixcloud.modules.RestServiceAPI;
@@ -45,7 +48,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, FeedAdapter.OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
+public class HomeActivity extends AppCompatActivity implements UserFeedAdapter.OnGetNextPageListener, UserFeedAdapter.OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
     @Inject
     public RestServiceAPI restServiceAPI;
@@ -119,11 +122,11 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
     private void fetchFeedDetails(Navigation nav) {
 
-        Observable<Feed> popularFeed = restServiceAPI.fetchFeed(mUser.username(), nav.getValue());
+        Observable<UserFeed> popularFeed = restServiceAPI.fetchFeed(mUser.username(), nav.getValue());
         popularFeed.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
-                    FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
+                    UserFeedFragment feedFragment = (UserFeedFragment) getSupportFragmentManager()
                             .findFragmentByTag(nav.getValue());
                     feedFragment.setFeed(feed);
                 }, error -> {
@@ -133,15 +136,14 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     }
 
     @Override
-    public void onGetNextPage(Object obj, String url) {
-        Navigation nav = (Navigation) obj;
-        FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
+    public void onGetNextPage(Navigation nav, String url) {
+        UserFeedFragment feedFragment = (UserFeedFragment) getSupportFragmentManager()
                 .findFragmentByTag(nav.getValue());
         if (feedFragment != null) {
             try {
 
                 feedFragment.setLoading(true);
-                restServiceAPI.fetchNextHomePage(nav.getValue(), url)
+                restServiceAPI.fetchNextFeedPage(mUser.username(), nav.getValue(), url)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(next -> {
@@ -169,7 +171,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
             if (nav == Navigation.HOME) {
                 fragment = new HomeFragment();
             } else {
-                fragment = new FeedFragment();
+                fragment = new UserFeedFragment();
             }
             Bundle bundle = new Bundle();
             bundle.putSerializable(FeedFragment.FEED_NAV, nav);
