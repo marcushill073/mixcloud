@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.model.UserFeed;
 
@@ -16,10 +17,8 @@ public class ServiceModuleImpl implements RestServiceAPI {
 
     private final RestService restService;
 
-
     public ServiceModuleImpl(Context context) {
-        restService =
-                ServiceGenerator.createService(RestService.class, context);
+        restService = ServiceGenerator.createService(RestService.class, context);
     }
 
     @Override
@@ -42,16 +41,26 @@ public class ServiceModuleImpl implements RestServiceAPI {
     }
 
     @Override
-    public Observable<UserFeed> fetchFeed(String user, String navigation) {
-        return restService.fetchFeed(user, navigation);
+    public Observable<Feed> fetchFeed(String user, String navigation) {
+        return restService.fetchFeed(user, navigation.toLowerCase());
     }
 
     @Override
-    public Observable<UserFeed> fetchNextFeedPage(String user, String navigation, String url) throws MalformedURLException {
+    public Observable<Feed> fetchNextFeedPage(String user, String navigation, String url) throws MalformedURLException {
         GetOffSet getOffSet = new GetOffSet(url).invoke();
         int limit = getOffSet.getLimit();
         int offset = getOffSet.getOffset();
         return restService.fetchNextFeedPage(user, navigation, limit, offset);
+    }
+
+    @Override
+    public Observable<UserFeed> fetchUserFeed(String user, String navigation) {
+        return null;
+    }
+
+    @Override
+    public Observable<UserFeed> fetchUserNextFeedPage(String user, String navigation, String url) throws MalformedURLException {
+        return null;
     }
 
     private class GetOffSet {

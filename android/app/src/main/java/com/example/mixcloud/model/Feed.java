@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Feed implements Parcelable {
 
-    @Nullable
     public abstract Paging paging();
 
     public abstract List<Track> data();

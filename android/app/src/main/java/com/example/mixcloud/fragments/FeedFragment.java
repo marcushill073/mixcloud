@@ -17,15 +17,16 @@ import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.adapters.UserFeedAdapter;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
+import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Type;
 
-public class FeedFragment extends Fragment {
+import java.io.Serializable;
 
-    public static final String FEED_TYPE = ".feed_type";
-    public static final String FEED_NAV = ".feed_nav";
+public class FeedFragment<T extends Serializable> extends Fragment {
+
     public static final String FEED = ".feed";
-    private FeedAdapter feedAdapter;
-    private Parcelable mF;
+    private static final String ON_NEXT_PAGE_LISTENER = ".onNextPageListener";
+    private FeedAdapter<T> feedAdapter;
 
     public void setLoading(boolean loading) {
         this.loading = loading;
@@ -33,7 +34,6 @@ public class FeedFragment extends Fragment {
 
     private boolean loading;
     private RecyclerView recyclerView;
-
 
     private final ViewTreeObserver.OnScrollChangedListener listener = new ViewTreeObserver.OnScrollChangedListener() {
 
@@ -54,14 +54,20 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        Type type = (Type) getArguments().getSerializable(FEED_TYPE);
+        return view;
+    }
 
-        feedAdapter = new FeedAdapter(type, (FeedAdapter.OnGetNextPageListener) getParentFragment(), (UserFeedAdapter.OnPlayListener) getActivity());
+    @Override
+    public void onActivityCreated(Bundle savedInstance) {
+        super.onActivityCreated(savedInstance);
+        T type = (T) getArguments().getSerializable(FEED);
+
+        FeedAdapter.OnGetNextPageListener<T> listener = (FeedAdapter.OnGetNextPageListener<T>) getArguments().getSerializable(ON_NEXT_PAGE_LISTENER);
+
+        feedAdapter = new FeedAdapter(type, listener, (OnPlayListener) getActivity());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(feedAdapter);
-        return view;
-
     }
 
     @Override
@@ -92,12 +98,17 @@ public class FeedFragment extends Fragment {
         return feedAdapter.getItemCount() == 0;
     }
 
-    public Type getType() {
-        return getArguments().getParcelable(FEED_TYPE);
+    public T getType() {
+        return getArguments().getParcelable(FEED);
     }
 
-    public Parcelable getFeed() {
-        return feedAdapter.getFeed();
+    public static <T extends Serializable> FeedFragment newInstance(T type, FeedAdapter.OnGetNextPageListener<T> listener) {
+        FeedFragment<T> fragment = new FeedFragment<>();
+        Bundle args = new Bundle();
+        args.putSerializable(FEED, type);
+        args.putSerializable(ON_NEXT_PAGE_LISTENER, listener);
+        fragment.setArguments(args);
+        return fragment;
     }
 }
  

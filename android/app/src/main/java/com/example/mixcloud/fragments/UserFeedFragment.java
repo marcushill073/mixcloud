@@ -1,7 +1,6 @@
 package com.example.mixcloud.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,17 +14,15 @@ import android.view.ViewTreeObserver;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.adapters.UserFeedAdapter;
-import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
+import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.model.UserFeed;
 
-import static com.example.mixcloud.fragments.FeedFragment.FEED_NAV;
-
-public class UserFeedFragment extends Fragment {
+public class UserFeedFragment extends FeedFragment<Navigation> {
 
 
-    private UserFeedAdapter adapter;
+    private UserFeedAdapter<Navigation> adapter;
 
     public void setLoading(boolean loading) {
         this.loading = loading;
@@ -34,7 +31,6 @@ public class UserFeedFragment extends Fragment {
     private boolean loading;
     private RecyclerView recyclerView;
 
-    private static final String TYPE = ".type";
     private final ViewTreeObserver.OnScrollChangedListener listener = new ViewTreeObserver.OnScrollChangedListener() {
 
         @Override
@@ -56,8 +52,8 @@ public class UserFeedFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
 
-        Navigation nav = (Navigation) getArguments().getSerializable(TYPE);
-        adapter = new UserFeedAdapter(nav, (UserFeedAdapter.OnGetNextPageListener) getActivity(), (UserFeedAdapter.OnPlayListener) getActivity());
+        Navigation nav = (Navigation) getArguments().getSerializable(FEED);
+        adapter = new UserFeedAdapter(nav, (UserFeedAdapter.OnGetNextPageListener) getActivity(), (OnPlayListener) getActivity());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -93,8 +89,9 @@ public class UserFeedFragment extends Fragment {
         return adapter.getItemCount() == 0;
     }
 
-    public Type getType() {
-        return getArguments().getParcelable(TYPE);
+    @Override
+    public Navigation getType() {
+        return (Navigation) getArguments().getSerializable(FEED);
     }
 
 }

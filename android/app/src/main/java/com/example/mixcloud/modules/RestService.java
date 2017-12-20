@@ -22,8 +22,14 @@ public interface RestService {
     Observable<Feed> fetchHomeFeedPage(@Path("feed") String type, @Query("limit") int limit, @Query("offset") int offset);
 
     @GET("{user}/{feed}")
-    Observable<UserFeed> fetchFeed(@Path("user") String user, @Path("feed") String navigation);
+    Observable<Feed> fetchFeed(@Path("user") String user, @Path("feed") String navigation);
 
     @GET("{user}/{feed}")
-    Observable<UserFeed> fetchNextFeedPage(@Path("user") String user, @Path("feed") String navigation, @Query("limit") int limit, @Query("offset") int offset);
+    Observable<Feed> fetchNextFeedPage(@Path("user") String user, @Path("feed") String navigation, @Query("limit") int limit, @Query("offset") int offset);
+
+    @GET("{user}/{feed}")
+    Observable<UserFeed> fetchUserFeed(@Path("user") String user, @Path("feed") String navigation);
+
+    @GET("{user}/{feed}")
+    Observable<UserFeed> fetchNextUserFeedFeedPage(@Path("user") String user, @Path("feed") String navigation, @Query("limit") int limit, @Query("offset") int offset);
 }

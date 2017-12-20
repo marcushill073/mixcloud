@@ -9,19 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.mixcloud.R;
+import com.example.mixcloud.model.Navigation;
 
 public class DrawerAdapter extends BaseAdapter{
 
-    private final String[] stringArrayRes;
+    private final Navigation[] navigations = Navigation.values();
 
-    public DrawerAdapter(Context context) {
-        this.stringArrayRes = context.getResources().getStringArray(R.array.drawer_strings);
-
-    }
 
     @Override
     public int getCount() {
-        return stringArrayRes.length;
+        return navigations.length;
     }
 
     @Override
@@ -41,27 +38,8 @@ public class DrawerAdapter extends BaseAdapter{
         view = inflater.inflate(R.layout.item_drawer, null);
         TextView text = (TextView) view.findViewById(R.id.drawer_item_text);
         AppCompatImageView image = (AppCompatImageView) view.findViewById(R.id.drawer_item_image);
-
-        String str = stringArrayRes[position];
-        text.setText(str);
-
-        switch(str) {
-
-            case "Tracks":
-                image.setImageResource(R.drawable.ic_iconmonstr_disc_5);
-                break;
-            case "Playlist":
-                image.setImageResource(R.drawable.ic_iconmonstr_disc_7);
-                break;
-            case "Groups":
-                image.setImageResource(R.drawable.ic_iconmonstr_user_29);
-            break;
-            case "Following":
-                image.setImageResource(R.drawable.ic_iconmonstr_user_1);
-                break;
-
-        }
-
+        image.setImageResource(navigations[position].getResourceDrawable());
+        text.setText(navigations[position].getValue());
         return view;
     }
 }

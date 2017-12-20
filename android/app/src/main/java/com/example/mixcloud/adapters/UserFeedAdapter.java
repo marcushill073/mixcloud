@@ -10,26 +10,27 @@ import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
+import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.model.UserData;
 import com.example.mixcloud.model.UserFeed;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+public class UserFeedAdapter<T extends Serializable> extends RecyclerView.Adapter<DataBinderHolder> {
 
-public class UserFeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
-
-    private final OnGetNextPageListener onGetNextPageListener;
-    private final Navigation type;
+    private final OnGetNextPageListener<T> onGetNextPageListener;
+    private final T type;
     private final OnPlayListener onPlayListener;
     private List<Track> feed;
     private String nextPath;
     private final int pageSize = 20;
 
-    public UserFeedAdapter(Navigation type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
+    public UserFeedAdapter(T type, OnGetNextPageListener<T> onGetNextPageListener, OnPlayListener onPlayListener) {
         this.type = type;
         this.feed = new ArrayList<>();
         this.onGetNextPageListener = onGetNextPageListener;
@@ -77,17 +78,12 @@ public class UserFeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
                 this.feed.addAll(tracks);
             }
         }
-        nextPath = feed.paging().next();
+        if(feed.paging() != null) {
+            nextPath = feed.paging().next();
+        }
     }
 
-    public interface OnGetNextPageListener {
-        void onGetNextPage(Navigation type, String url);
+    public interface OnGetNextPageListener<T extends Serializable> {
+        void onGetNextPage(T type, String url);
     }
-
-    public interface OnPlayListener {
-
-        void play(Track track);
-    }
-
-
 }

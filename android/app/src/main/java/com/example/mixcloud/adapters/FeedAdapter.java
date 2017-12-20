@@ -2,6 +2,7 @@ package com.example.mixcloud.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,25 +11,27 @@ import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
+import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.model.UserFeed;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
+public class FeedAdapter<T extends Serializable> extends RecyclerView.Adapter<DataBinderHolder> {
 
-    private final OnGetNextPageListener onGetNextPageListener;
-    private final Type type;
-    private final UserFeedAdapter.OnPlayListener onPlayListener;
+    private final OnGetNextPageListener<T> onGetNextPageListener;
+    private final T type;
+    private final OnPlayListener onPlayListener;
     private Feed feed;
     private String nextPath;
     private final int pageSize = 20;
 
-    public FeedAdapter(Type type, OnGetNextPageListener onGetNextPageListener, UserFeedAdapter.OnPlayListener onPlayListener) {
+    public FeedAdapter(T type, OnGetNextPageListener<T> onGetNextPageListener, OnPlayListener onPlayListener) {
         this.type = type;
         this.feed = Feed.builder().data(new ArrayList<>())
                 .paging(Paging.builder().next("").build()).build();
@@ -76,7 +79,7 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
         return feed;
     }
 
-    public interface OnGetNextPageListener {
-        void onGetNextPage(Type type, String url);
+    public interface OnGetNextPageListener<T extends Serializable> extends Serializable{
+        void onGetNextPage(T string, String url);
     }
 }

@@ -4,23 +4,23 @@ package com.example.mixcloud.adapters;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Type;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
-    private static Map<Integer, FeedFragment> map;
+    private static Map<Integer, FeedFragment<Type>> map;
+    private final FeedAdapter.OnGetNextPageListener<Type> listener;
 
-    public HomePagerAdapter(FragmentManager fm) {
+    public HomePagerAdapter(FragmentManager fm, FeedAdapter.OnGetNextPageListener<Type> listener) {
         super(fm);
+        this.listener = listener;
     }
 
     @Override
@@ -33,12 +33,10 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
         if (map == null) {
             map = new HashMap<>();
         }
-        FeedFragment fragment;
+        FeedFragment<Type> fragment;
         if (map.get(position) == null) {
-            fragment = new FeedFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FeedFragment.FEED_TYPE, Type.values()[position]);
-            fragment.setArguments(bundle);
+            Type type = Type.values()[position];
+            fragment = FeedFragment.newInstance(type, listener);
             map.put(position, fragment);
         } else {
             fragment = map.get(position);
@@ -52,7 +50,7 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
         return Type.values()[position].getValue();
     }
 
-    public FeedFragment getFeedFragment(int position) {
+    public FeedFragment<Type> getFeedFragment(int position) {
         if(map != null) {
             return map.get(position);
         } else {
@@ -60,7 +58,7 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public Map<Integer, FeedFragment> getCurrentFeed() {
+    public Map<Integer, FeedFragment<Type>> getCurrentFeed() {
         return map;
     }
 }

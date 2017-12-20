@@ -22,10 +22,6 @@ import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
 
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -35,7 +31,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
+public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageListener<Type>, TabLayout.OnTabSelectedListener {
 
     private static final String HOME_FEED = ".home_feed";
     @Inject
@@ -58,7 +54,7 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        adapter = new HomePagerAdapter(getChildFragmentManager());
+        adapter = new HomePagerAdapter(getChildFragmentManager(), this);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
@@ -77,8 +73,8 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
         popularFeed.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
-                    FeedFragment feedFragment = adapter.getFeedFragment(type.ordinal());
-                    feedFragment.setFeed(feed);
+                    FeedFragment<Type> fragment = adapter.getFeedFragment(type.ordinal());
+                    fragment.setFeed(feed);
                 }, error -> {
                     error.printStackTrace();
                 });
@@ -87,20 +83,20 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
 
     @Override
     public void onGetNextPage(Type type, String url) {
-        FeedFragment feedFragment = adapter.getFeedFragment(type.ordinal());
-        if (feedFragment != null) {
+        FeedFragment<Type> baseFragment = adapter.getFeedFragment(type.ordinal());
+        if (baseFragment != null) {
             try {
 
-                feedFragment.setLoading(true);
+                baseFragment.setLoading(true);
                 restServiceAPI.fetchNextHomePage(type.getValue(), url)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(next -> {
-                            feedFragment.addFeed(next);
-                            feedFragment.setLoading(false);
+                            baseFragment.addFeed(next);
+                            baseFragment.setLoading(false);
                         }, error -> {
                             error.printStackTrace();
-                            feedFragment.setLoading(false);
+                            baseFragment.setLoading(false);
                         });
 
             } catch (MalformedURLException e) {
