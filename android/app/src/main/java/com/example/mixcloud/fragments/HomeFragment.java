@@ -22,6 +22,10 @@ import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -33,6 +37,7 @@ import rx.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
 
+    private static final String HOME_FEED = ".home_feed";
     @Inject
     public RestServiceAPI restServiceAPI;
     private HomePagerAdapter adapter;
@@ -47,21 +52,26 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-
-        adapter = new HomePagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
-
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(this);
-        setupTabViews();
-
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        fetchFeedDetails(Type.POPULAR);
+        Map<Integer, FeedFragment> map = null;
+        if (savedInstanceState == null) {
+            fetchFeedDetails(Type.POPULAR);
+        } else {
+            map = new HashMap<>();
+            for (int i = 0; i < Type.values().length; i++) {
+                map.put(i, savedInstanceState.getParcelable(Type.values()[i].getValue()));
+            }
+        }
+        adapter = new HomePagerAdapter(getChildFragmentManager(), map);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(this);
+        setupTabViews();
 
     }
 
@@ -130,7 +140,6 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
             Type type = Type.values()[tab.getPosition()];
             fetchFeedDetails(type);
         }
-
     }
 
     @Override
@@ -142,5 +151,18 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Map<Integer, FeedFragment> map = adapter.getCurrentFeed();
+        Iterator<FeedFragment> values = map.values().iterator();
+        while (values.hasNext()) {
+            FeedFragment feedFragment = values.next();
+            outState.putParcelable(feedFragment.getType().getValue(), feedFragment.getFeed());
+        }
+
+    }
+
 
 }

@@ -5,20 +5,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Type;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomePagerAdapter extends FragmentPagerAdapter {
+public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
     private static Map<Integer, FeedFragment> map;
 
-    public HomePagerAdapter(FragmentManager fm) {
+    public HomePagerAdapter(FragmentManager fm, Map<Integer, FeedFragment> map) {
         super(fm);
+        this.map = map;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
         if (map == null) {
             map = new HashMap<>();
         }
-        FeedFragment fragment = null;
+        FeedFragment fragment;
         if (map.get(position) == null) {
             fragment = new FeedFragment();
             Bundle bundle = new Bundle();
@@ -51,6 +54,14 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
     }
 
     public FeedFragment getFeedFragment(int position) {
-        return map.get(position);
+        if(map != null) {
+            return map.get(position);
+        } else {
+            return null;
+        }
+    }
+
+    public Map<Integer, FeedFragment> getCurrentFeed() {
+        return map;
     }
 }

@@ -26,6 +26,7 @@ public abstract class Track implements Parcelable {
 
     public abstract int listenerCount();
 
+    @Nullable
     public abstract String name();
 
     @Nullable
@@ -33,8 +34,10 @@ public abstract class Track implements Parcelable {
 
     public abstract Pictures pictures();
 
+    @Nullable
     public abstract User user();
 
+    @Nullable
     public abstract List<Tag> tags();
 
     public abstract int repostCount();

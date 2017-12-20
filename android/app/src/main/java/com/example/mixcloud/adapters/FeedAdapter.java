@@ -81,6 +81,10 @@ public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
         nextPath = feed.paging().next();
     }
 
+    public Feed getFeed() {
+        return feed;
+    }
+
     public interface OnGetNextPageListener {
         void onGetNextPage(Object type, String url);
     }

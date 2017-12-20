@@ -1,12 +1,12 @@
 package com.example.mixcloud.model;
 
+
 import java.io.Serializable;
 
 public enum Navigation implements Serializable {
 
-    FEED("feed"), PLAYLISTS("playlists"), COMMENTS("comments"), FOLLOWERS("followers"),
-    FAVORITES("favorites"), FOLLOWING("following"), CLOUDCASTS("cloudcasts"),
-    LISTENS("listens");
+    HOME(""), FEED("feed"), PLAYLISTS("playlists"), COMMENTS("comments"), FOLLOWERS("followers"),
+    FAVORITES("favorites"), FOLLOWING("following"), CLOUDCASTS("cloudcasts"), LISTENS("listens");
 
     private final String value;
 

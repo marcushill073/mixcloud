@@ -4,8 +4,10 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,47 +39,50 @@ import java.net.MalformedURLException;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, FeedAdapter.OnPlayListener, AdapterView.OnItemClickListener {
+public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, FeedAdapter.OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
-    private static final String HOME = ".home";
     @Inject
     public RestServiceAPI restServiceAPI;
 
+    @BindView(R.id.drawer_layout)
+    public DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar)
+    public Toolbar toolbar;
+
     private ViewDataBinding binding;
     private User mUser;
-    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setSupportActionBar(toolbar);
 
         DataComponent dataComponent = DaggerDataComponent.builder()
                 .serviceModule(new ServiceModule(new ServiceModuleImpl(this)))
                 .build();
 
         dataComponent.inject(this);
+        ButterKnife.bind(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_holder, new HomeFragment(), HOME)
+                .add(R.id.fragment_holder, new HomeFragment(), Navigation.HOME.getValue())
                 .commit();
 
         fetchUserDetails();
 
-        findViewById(R.id.menu_button).setOnClickListener(view -> {
-             drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                drawerLayout.closeDrawer(Gravity.LEFT);
-            } else {
-                drawerLayout.openDrawer(Gravity.LEFT);
-            }
-        });
-
+        toolbar.setNavigationIcon(R.drawable.ic_menu_black_logo);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(this);
 
     }
 
@@ -110,26 +115,6 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     public void play(Track track) {
         Gson gson = new Gson();
         Log.d(HomeActivity.class.getSimpleName(), gson.toJson(track).toString());
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Navigation nav = Navigation.values()[position];
-
-        FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag(nav.getValue());
-        if(feedFragment == null) {
-            feedFragment = new FeedFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FeedFragment.FEED_NAV, nav);
-            feedFragment.setArguments(bundle);
-        }
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_holder,feedFragment, nav.getValue())
-                .commit();
-
-        fetchFeedDetails(nav);
-
     }
 
     private void fetchFeedDetails(Navigation nav) {
@@ -173,4 +158,41 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Navigation nav = Navigation.values()[position - 1];
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(nav.getValue());
+
+        if (fragment == null) {
+            if (nav == Navigation.HOME) {
+                fragment = new HomeFragment();
+            } else {
+                fragment = new FeedFragment();
+            }
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(FeedFragment.FEED_NAV, nav);
+            fragment.setArguments(bundle);
+        }
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_holder, fragment, nav.getValue())
+                .commit();
+
+        if (nav != Navigation.HOME) {
+            fetchFeedDetails(nav);
+        }
+        drawerLayout.closeDrawer(Gravity.LEFT);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            drawerLayout.closeDrawer(Gravity.LEFT);
+        } else {
+            drawerLayout.openDrawer(Gravity.LEFT);
+        }
+    }
 }

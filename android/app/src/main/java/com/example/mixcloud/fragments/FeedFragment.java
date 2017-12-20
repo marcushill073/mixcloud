@@ -1,6 +1,7 @@
 package com.example.mixcloud.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ public class FeedFragment extends Fragment {
     public static final String FEED_NAV = ".feed_nav";
     public static final String FEED = ".feed";
     private FeedAdapter feedAdapter;
+    private Parcelable mF;
 
     public void setLoading(boolean loading) {
         this.loading = loading;
@@ -92,6 +94,14 @@ public class FeedFragment extends Fragment {
 
     public boolean isEmpty() {
         return feedAdapter.getItemCount() == 0;
+    }
+
+    public Type getType() {
+        return getArguments().getParcelable(FEED_TYPE);
+    }
+
+    public Parcelable getFeed() {
+        return feedAdapter.getFeed();
     }
 }
  
