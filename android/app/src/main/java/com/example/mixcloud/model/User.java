@@ -6,8 +6,10 @@ import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
+import java.io.Serializable;
+
 @AutoValue
-public abstract class User implements Parcelable {
+public abstract class User implements Parcelable, Serializable {
 
     public abstract int cloudcastCount();
 

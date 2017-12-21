@@ -58,7 +58,6 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
 
-    private ViewDataBinding binding;
     private User mUser;
 
     @Override
@@ -94,7 +93,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
                     mUser = user;
-                    binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.item_drawer_header, null, false);
+                    ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.item_drawer_header, null, false);
                     binding.setVariable(BR.user, mUser);
                     binding.executePendingBindings();
 
