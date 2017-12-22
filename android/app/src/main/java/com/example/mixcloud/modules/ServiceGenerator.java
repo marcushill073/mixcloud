@@ -49,4 +49,17 @@ public class ServiceGenerator {
                 .build();
         return MoshiConverterFactory.create(moshi);
     }
+
+    public static <S> S createService(
+            Class<S> serviceClass, final Context context, OfflineMockInterceptor interceptor) {
+
+        if (!httpClient.interceptors().contains(interceptor)) {
+            httpClient.addInterceptor(interceptor);
+
+            builder.client(httpClient.build());
+            retrofit = builder.build();
+        }
+
+        return retrofit.create(serviceClass);
+    }
 }

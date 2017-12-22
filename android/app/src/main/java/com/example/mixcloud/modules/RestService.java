@@ -15,6 +15,7 @@ public interface RestService {
     @POST("me")
     Observable<User> fetchUser();
 
+
     @GET("{feed}")
     Observable<Feed> fetchHomeFeed(@Path("feed") String type);
 
