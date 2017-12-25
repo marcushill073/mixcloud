@@ -1,7 +1,6 @@
 package com.example.mixcloud.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,11 +13,8 @@ import android.view.ViewTreeObserver;
 
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
-import com.example.mixcloud.adapters.UserFeedAdapter;
 import com.example.mixcloud.model.Feed;
-import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
-import com.example.mixcloud.model.Type;
 
 import java.io.Serializable;
 

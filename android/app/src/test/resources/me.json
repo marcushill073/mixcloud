@@ -1,0 +1,29 @@
+{
+    "username": "marcushill073", 
+    "favorite_count": 0, 
+    "name": "marcushill073", 
+    "following_count": 0, 
+    "url": "https://www.mixcloud.com/marcushill073/", 
+    "pictures": {
+        "medium": "https://thumbnailer.mixcloud.com/unsafe/100x100/defaults/users/6.png", 
+        "320wx320h": "https://thumbnailer.mixcloud.com/unsafe/320x320/defaults/users/6.png", 
+        "extra_large": "https://thumbnailer.mixcloud.com/unsafe/600x600/defaults/users/6.png", 
+        "large": "https://thumbnailer.mixcloud.com/unsafe/300x300/defaults/users/6.png", 
+        "640wx640h": "https://thumbnailer.mixcloud.com/unsafe/640x640/defaults/users/6.png", 
+        "medium_mobile": "https://thumbnailer.mixcloud.com/unsafe/80x80/defaults/users/6.png", 
+        "small": "https://thumbnailer.mixcloud.com/unsafe/25x25/defaults/users/6.png", 
+        "thumbnail": "https://thumbnailer.mixcloud.com/unsafe/50x50/defaults/users/6.png"
+    }, 
+    "is_current_user": true, 
+    "listen_count": 2, 
+    "updated_time": "2017-07-28T18:34:52Z", 
+    "is_premium": false, 
+    "follower_count": 0, 
+    "follower": false, 
+    "biog": "", 
+    "key": "/marcushill073/", 
+    "following": false, 
+    "created_time": "2017-07-28T18:34:52Z", 
+    "is_pro": false, 
+    "cloudcast_count": 0
+}

@@ -17,19 +17,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mixcloud.BR;
+import com.example.mixcloud.BuildConfig;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
-import com.example.mixcloud.adapters.UserFeedAdapter;
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.fragments.HomeFragment;
-import com.example.mixcloud.fragments.UserFeedFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.User;
-import com.example.mixcloud.model.UserFeed;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
 import com.example.mixcloud.modules.RestServiceAPI;
@@ -47,6 +45,8 @@ import butterknife.ButterKnife;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static com.example.mixcloud.model.Navigation.HOME;
 
 public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener<Navigation>, OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -167,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(nav.getValue());
 
         if (fragment == null) {
-            if (nav == Navigation.HOME) {
+            if (nav == HOME) {
                 fragment = new HomeFragment();
             } else {
                 fragment = FeedFragment.newInstance(nav, this);
@@ -179,7 +179,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 .replace(R.id.fragment_holder, fragment, nav.getValue())
                 .commit();
 
-        if (nav != Navigation.HOME) {
+        if (nav != HOME) {
             fetchFeedDetails(nav);
         }
         drawerLayout.closeDrawer(Gravity.LEFT);

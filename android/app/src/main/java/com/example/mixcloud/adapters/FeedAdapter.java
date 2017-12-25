@@ -2,7 +2,6 @@ package com.example.mixcloud.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,12 +9,9 @@ import android.view.ViewGroup;
 import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
 import com.example.mixcloud.model.Feed;
-import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
-import com.example.mixcloud.model.Type;
-import com.example.mixcloud.model.UserFeed;
 
 import java.io.Serializable;
 import java.util.ArrayList;

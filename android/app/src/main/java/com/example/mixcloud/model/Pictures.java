@@ -3,6 +3,7 @@ package com.example.mixcloud.model;
 import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
+import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Pictures implements Parcelable {
 
+    @Json(name="extra_large")
     @Nullable
     public abstract String extraLarge();
 

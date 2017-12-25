@@ -3,8 +3,8 @@ package com.example.mixcloud.modules;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.mixcloud.BuildConfig;
 import com.example.mixcloud.model.Feed;
-import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.model.UserFeed;
 
@@ -18,7 +18,11 @@ public class ServiceModuleImpl implements RestServiceAPI {
     private final RestService restService;
 
     public ServiceModuleImpl(Context context) {
-        restService = ServiceGenerator.createService(RestService.class, context);
+        if (BuildConfig.BUILD_TYPE == "mock") {
+            restService = ServiceGenerator.createService(RestService.class,new OfflineMockInterceptor(context));
+        } else {
+            restService = ServiceGenerator.createService(RestService.class, context);
+        }
     }
 
     @Override

@@ -4,13 +4,18 @@ import android.content.Context;
 
 import com.squareup.moshi.Moshi;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
-public class ServiceGenerator {
+public final class ServiceGenerator {
+
+    private ServiceGenerator(){
+        //empty constructor
+    }
 
     public static final String BASE_URL="https://api.mixcloud.com/";
 
@@ -25,7 +30,7 @@ public class ServiceGenerator {
     private static Retrofit retrofit = builder.build();
 
     public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null);
+        return createService(serviceClass);
     }
 
     public static <S> S createService(
@@ -35,7 +40,6 @@ public class ServiceGenerator {
 
             if (!httpClient.interceptors().contains(interceptor)) {
                 httpClient.addInterceptor(interceptor);
-
                 builder.client(httpClient.build());
                 retrofit = builder.build();
             }
@@ -51,11 +55,10 @@ public class ServiceGenerator {
     }
 
     public static <S> S createService(
-            Class<S> serviceClass, final Context context, OfflineMockInterceptor interceptor) {
+            Class<S> serviceClass, OfflineMockInterceptor interceptor) {
 
         if (!httpClient.interceptors().contains(interceptor)) {
-            httpClient.addInterceptor(interceptor);
-
+            httpClient.addNetworkInterceptor(interceptor);
             builder.client(httpClient.build());
             retrofit = builder.build();
         }
