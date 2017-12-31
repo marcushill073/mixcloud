@@ -3,7 +3,6 @@ package com.example.mixcloud.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;

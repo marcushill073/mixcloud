@@ -1,10 +1,14 @@
 package com.example.mixcloud.fragments;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +18,10 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.mixcloud.PlayerIntentService;
+import com.example.mixcloud.PlayerService;
 import com.example.mixcloud.R;
+import com.example.mixcloud.model.MetaData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +29,7 @@ import butterknife.ButterKnife;
 public class WebViewFragment extends Fragment {
 
     private static final String TRACK_URL = "url";
+
     @BindView(R.id.webview)
     public WebView webview;
     private View view;
@@ -42,29 +50,34 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        webview.setWebChromeClient(new WebChromeClient());
-        webview.setWebViewClient(new WebViewClient() {
-            @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                return super.shouldInterceptRequest(view, request);
-            }
-        });
-        Log.d("track url", getArguments().getString(TRACK_URL));
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.loadUrl(getArguments().getString(TRACK_URL));
+        MetaData metaData = getArguments().getParcelable(TRACK_URL);
 
+        ServiceConnection serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                PlayerIntentService playerService = ((PlayerIntentService.PlayerBinder) service).getService();
+                playerService.loadWebView(webview, metaData.html());
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+        };
+        Intent intent = new Intent(getActivity(), PlayerIntentService.class);
+        getActivity().startService(intent);
+        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public static WebViewFragment newInstance(String url) {
+    public static WebViewFragment newInstance(MetaData metaData) {
         WebViewFragment fragment = new WebViewFragment();
         fragment.setRetainInstance(true);
         Bundle bundle = new Bundle();
-        bundle.putString(TRACK_URL, url);
+        bundle.putParcelable(TRACK_URL, metaData);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public void setTrackUrl(String url) {
-        webview.loadUrl(url);
+    public void setTrackUrl(MetaData metaData) {
+        webview.loadUrl(metaData.url());
     }
 }

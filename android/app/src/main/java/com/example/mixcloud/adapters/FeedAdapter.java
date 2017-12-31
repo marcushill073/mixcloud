@@ -14,7 +14,6 @@ import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

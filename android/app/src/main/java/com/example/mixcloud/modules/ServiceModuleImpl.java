@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.example.mixcloud.BuildConfig;
 import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.MetaData;
 import com.example.mixcloud.model.User;
-import com.example.mixcloud.model.UserFeed;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -58,13 +58,8 @@ public class ServiceModuleImpl implements RestServiceAPI {
     }
 
     @Override
-    public Observable<UserFeed> fetchUserFeed(String user, String navigation) {
-        return null;
-    }
-
-    @Override
-    public Observable<UserFeed> fetchUserNextFeedPage(String user, String navigation, String url) throws MalformedURLException {
-        return null;
+    public Observable<MetaData> fetchMetaData(String url) {
+        return restService.fetchMetaData(url);
     }
 
     private class GetOffSet {

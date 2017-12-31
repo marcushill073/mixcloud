@@ -7,8 +7,6 @@ import android.support.annotation.DrawableRes;
 
 import com.example.mixcloud.R;
 
-import java.io.Serializable;
-
 public enum Navigation implements Parcelable {
 
     HOME("Home"), FEED("Feed"), PLAYLISTS("Playlists"), FOLLOWERS("Followers"),

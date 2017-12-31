@@ -5,9 +5,6 @@ import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
 import com.example.mixcloud.R;
-import com.google.auto.value.AutoValue;
-
-import java.io.Serializable;
 
 public enum Type implements Parcelable {
     POPULAR("popular"), HOT("popular/hot"), NEW("new");

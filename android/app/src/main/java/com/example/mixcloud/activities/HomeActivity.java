@@ -1,6 +1,5 @@
 package com.example.mixcloud.activities;
 
-import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -9,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mixcloud.BR;
-import com.example.mixcloud.BuildConfig;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
@@ -28,18 +25,17 @@ import com.example.mixcloud.fragments.WebViewFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
-import com.example.mixcloud.model.Track;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
+import com.example.mixcloud.modules.RestService;
 import com.example.mixcloud.modules.RestServiceAPI;
+import com.example.mixcloud.modules.ServiceGenerator;
 import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -117,28 +113,6 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         Picasso.with(view.getContext()).load(url).into(view);
     }
 
-    @Override
-    public void play(String url) {
-        try {
-            URL uri = new URL(url);
-            String newUrl = "http://api.mixcloud.com"  + uri.getPath() + "embed-html/";
-
-        WebViewFragment fragment = (WebViewFragment) getSupportFragmentManager().findFragmentByTag(PLAYER);
-        if(fragment == null) {
-
-            fragment = WebViewFragment.newInstance(newUrl);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.player, fragment, PLAYER)
-                    .commit();
-        } else {
-            fragment.setTrackUrl(url);
-        }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void fetchFeedDetails(Navigation nav) {
 
         Observable<Feed> popularFeed = restServiceAPI.fetchFeed(mUser.username(), nav.getValue());
@@ -213,4 +187,26 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
             drawerLayout.openDrawer(Gravity.LEFT);
         }
     }
+
+    @Override
+    public void play(String url) {
+        RestService metaService = ServiceGenerator.createService(RestService.class, ServiceGenerator.META_URL);
+        metaService.fetchMetaData(url)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(metaData -> {
+
+                    WebViewFragment fragment = (WebViewFragment) getSupportFragmentManager().findFragmentByTag(PLAYER);
+                    if (fragment == null) {
+
+                        fragment = WebViewFragment.newInstance(metaData);
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.player, fragment, PLAYER)
+                                .commit();
+                    } else {
+                        fragment.setTrackUrl(metaData);
+                    }
+                });
+    }
+
 }

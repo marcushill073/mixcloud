@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.squareup.moshi.Moshi;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -18,6 +17,7 @@ public final class ServiceGenerator {
     }
 
     public static final String BASE_URL="https://api.mixcloud.com/";
+    public static final String META_URL="https://www.mixcloud.com/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -62,6 +62,16 @@ public final class ServiceGenerator {
             builder.client(httpClient.build());
             retrofit = builder.build();
         }
+
+        return retrofit.create(serviceClass);
+    }
+
+    public static <S> S createService(
+            Class<S> serviceClass, String baseUrl) {
+
+        builder.baseUrl(baseUrl).build();
+
+        retrofit = builder.build();
 
         return retrofit.create(serviceClass);
     }

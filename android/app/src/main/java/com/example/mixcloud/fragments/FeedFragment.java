@@ -16,9 +16,6 @@ import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.OnPlayListener;
-import com.example.mixcloud.model.Type;
-
-import java.io.Serializable;
 
 public class FeedFragment<T extends Parcelable> extends Fragment {
 

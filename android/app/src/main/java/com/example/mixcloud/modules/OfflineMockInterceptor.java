@@ -1,12 +1,7 @@
 package com.example.mixcloud.modules;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.example.mixcloud.model.Pictures;
-import com.example.mixcloud.model.User;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

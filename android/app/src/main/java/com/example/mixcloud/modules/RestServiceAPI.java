@@ -1,8 +1,8 @@
 package com.example.mixcloud.modules;
 
 import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.MetaData;
 import com.example.mixcloud.model.User;
-import com.example.mixcloud.model.UserFeed;
 
 import java.net.MalformedURLException;
 
@@ -20,7 +20,6 @@ public interface RestServiceAPI {
 
     Observable<Feed> fetchNextFeedPage(String user, String navigation, String url) throws MalformedURLException;
 
-    Observable<UserFeed> fetchUserFeed(String user, String navigation);
+    Observable<MetaData> fetchMetaData(String url);
 
-    Observable<UserFeed> fetchUserNextFeedPage(String user, String navigation, String url) throws MalformedURLException;
 }
