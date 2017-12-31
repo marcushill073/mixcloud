@@ -4,6 +4,7 @@ package com.example.mixcloud.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.model.Type;
@@ -11,7 +12,7 @@ import com.example.mixcloud.model.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomePagerAdapter extends FragmentPagerAdapter {
+public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
     private static Map<Integer, FeedFragment<Type>> map;
     private final FeedAdapter.OnGetNextPageListener<Type> listener;
@@ -34,7 +35,7 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
         FeedFragment<Type> fragment;
         if (map.get(position) == null) {
             Type type = Type.values()[position];
-            fragment = FeedFragment.newInstance(type, listener);
+            fragment = FeedFragment.newInstance(type);
             map.put(position, fragment);
         } else {
             fragment = map.get(position);

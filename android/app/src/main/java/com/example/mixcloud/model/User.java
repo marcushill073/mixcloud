@@ -32,7 +32,12 @@ public abstract class User implements Parcelable, Serializable {
     public abstract String username();
 
     public static Builder builder() {
-        return new AutoValue_User.Builder();
+        return new AutoValue_User.Builder()
+                .cloudcastCount(0)
+                .followerCount(0)
+                .followingCount(0)
+                .favoriteCount(0)
+                .isPremium(false);
     }
 
     @AutoValue.Builder

@@ -1,6 +1,7 @@
 package com.example.mixcloud.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,10 +16,11 @@ import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.OnPlayListener;
+import com.example.mixcloud.model.Type;
 
 import java.io.Serializable;
 
-public class FeedFragment<T extends Serializable> extends Fragment {
+public class FeedFragment<T extends Parcelable> extends Fragment {
 
     public static final String FEED = ".feed";
     private static final String ON_NEXT_PAGE_LISTENER = ".onNextPageListener";
@@ -58,7 +60,7 @@ public class FeedFragment<T extends Serializable> extends Fragment {
         super.onActivityCreated(savedInstance);
         T type = (T) getArguments().getSerializable(FEED);
 
-        FeedAdapter.OnGetNextPageListener<T> listener = (FeedAdapter.OnGetNextPageListener<T>) getArguments().getSerializable(ON_NEXT_PAGE_LISTENER);
+        FeedAdapter.OnGetNextPageListener<T> listener = (FeedAdapter.OnGetNextPageListener<T>) getParentFragment();
 
         feedAdapter = new FeedAdapter(type, listener, (OnPlayListener) getActivity());
 
@@ -98,11 +100,10 @@ public class FeedFragment<T extends Serializable> extends Fragment {
         return getArguments().getParcelable(FEED);
     }
 
-    public static <T extends Serializable> FeedFragment newInstance(T type, FeedAdapter.OnGetNextPageListener<T> listener) {
+    public static <T extends Parcelable> FeedFragment newInstance(T type) {
         FeedFragment<T> fragment = new FeedFragment<>();
         Bundle args = new Bundle();
-        args.putSerializable(FEED, type);
-        args.putSerializable(ON_NEXT_PAGE_LISTENER, listener);
+        args.putParcelable(FEED, type);
         fragment.setArguments(args);
         return fragment;
     }

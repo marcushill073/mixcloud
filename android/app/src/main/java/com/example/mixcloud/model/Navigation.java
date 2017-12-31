@@ -1,13 +1,15 @@
 package com.example.mixcloud.model;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
 import com.example.mixcloud.R;
 
 import java.io.Serializable;
 
-public enum Navigation implements Serializable {
+public enum Navigation implements Parcelable {
 
     HOME("Home"), FEED("Feed"), PLAYLISTS("Playlists"), FOLLOWERS("Followers"),
     FAVORITES("Favorites"), FOLLOWING("Following"), CLOUDCASTS("Cloudcasts"), LISTENS("Listens");
@@ -44,4 +46,31 @@ public enum Navigation implements Serializable {
                 default: return 0;
         }
     }
+
+
+    Navigation(Parcel in) {
+        value = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(value);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Navigation> CREATOR = new Creator<Navigation>() {
+        @Override
+        public Navigation createFromParcel(Parcel in) {
+            return Navigation.valueOf(in.readString());
+        }
+
+        @Override
+        public Navigation[] newArray(int size) {
+            return new Navigation[size];
+        }
+    };
 }

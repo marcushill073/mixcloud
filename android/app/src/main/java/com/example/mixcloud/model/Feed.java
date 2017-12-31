@@ -1,6 +1,7 @@
 package com.example.mixcloud.model;
 
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
@@ -26,6 +27,7 @@ public abstract class Feed implements Parcelable {
 
         public abstract Builder data(List<Track> value);
 
+        @Nullable
         public abstract Builder paging(Paging value);
 
         public abstract Feed build();

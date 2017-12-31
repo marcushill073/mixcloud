@@ -1,5 +1,6 @@
 package com.example.mixcloud.activities;
 
+import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -23,6 +24,7 @@ import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.fragments.HomeFragment;
+import com.example.mixcloud.fragments.WebViewFragment;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
@@ -37,6 +39,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -50,6 +53,7 @@ import static com.example.mixcloud.model.Navigation.HOME;
 
 public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener<Navigation>, OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
+    private static final String PLAYER = ".player";
     @Inject
     public RestServiceAPI restServiceAPI;
 
@@ -114,9 +118,25 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     }
 
     @Override
-    public void play(Track track) {
-        Gson gson = new Gson();
-        Log.d(HomeActivity.class.getSimpleName(), gson.toJson(track).toString());
+    public void play(String url) {
+        try {
+            URL uri = new URL(url);
+            String newUrl = "http://api.mixcloud.com"  + uri.getPath() + "embed-html/";
+
+        WebViewFragment fragment = (WebViewFragment) getSupportFragmentManager().findFragmentByTag(PLAYER);
+        if(fragment == null) {
+
+            fragment = WebViewFragment.newInstance(newUrl);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.player, fragment, PLAYER)
+                    .commit();
+        } else {
+            fragment.setTrackUrl(url);
+        }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void fetchFeedDetails(Navigation nav) {
@@ -170,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
             if (nav == HOME) {
                 fragment = new HomeFragment();
             } else {
-                fragment = FeedFragment.newInstance(nav, this);
+                fragment = FeedFragment.newInstance(nav);
             }
         }
 

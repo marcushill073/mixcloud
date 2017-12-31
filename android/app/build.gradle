@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: "jacoco"
-
 apply plugin: 'project-report'
 
 apply from: "../../node_modules/react-native/react.gradle"

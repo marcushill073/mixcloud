@@ -2,6 +2,7 @@ package com.example.mixcloud.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FeedAdapter<T extends Serializable> extends RecyclerView.Adapter<DataBinderHolder> {
+public class FeedAdapter<T extends Parcelable> extends RecyclerView.Adapter<DataBinderHolder> {
 
     private final OnGetNextPageListener<T> onGetNextPageListener;
     private final T type;
@@ -75,7 +76,7 @@ public class FeedAdapter<T extends Serializable> extends RecyclerView.Adapter<Da
         return feed;
     }
 
-    public interface OnGetNextPageListener<T extends Serializable> extends Serializable{
+    public interface OnGetNextPageListener<T extends Parcelable> {
         void onGetNextPage(T string, String url);
     }
 }
