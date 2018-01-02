@@ -15,13 +15,25 @@
         android:layout_marginTop="?attr/actionBarSize">
         <!-- The main content view -->
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
+
         <FrameLayout
             android:id="@+id/fragment_holder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/player"/>
         <!-- The navigation drawer -->
-
-
+        <FrameLayout
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
         <ListView
             android:id="@+id/left_drawer"
             android:layout_width="240dp"
@@ -35,9 +47,5 @@
 
     </android.support.v4.widget.DrawerLayout>
 
-    <FrameLayout
-        android:id="@+id/player"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:layout_gravity="bottom" />
+
 </android.support.design.widget.CoordinatorLayout>

@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mixcloud.BR;
+import com.example.mixcloud.Manifest;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
@@ -85,6 +87,9 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(this);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.MEDIA_CONTENT_CONTROL);
 
     }
 

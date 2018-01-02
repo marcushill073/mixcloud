@@ -1,14 +1,17 @@
 package com.example.mixcloud.fragments;
 
+import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,17 +53,24 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         MetaData metaData = getArguments().getParcelable(TRACK_URL);
 
+        play(metaData);
+    }
+
+    private void play(MetaData metaData) {
         ServiceConnection serviceConnection = new ServiceConnection() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 PlayerIntentService playerService = ((PlayerIntentService.PlayerBinder) service).getService();
-                playerService.loadWebView(webview, metaData.html());
+                playerService.loadWebView((AppCompatActivity) getActivity(), webview, metaData.html());
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
+
             }
         };
         Intent intent = new Intent(getActivity(), PlayerIntentService.class);
@@ -78,6 +88,6 @@ public class WebViewFragment extends Fragment {
     }
 
     public void setTrackUrl(MetaData metaData) {
-        webview.loadUrl(metaData.url());
+        play(metaData);
     }
 }
