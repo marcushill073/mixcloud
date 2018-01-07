@@ -1,4 +1,4 @@
-package com.example.mixcloud.modules;
+package com.example.mixcloud.rest;
 
 import com.ryanharter.auto.value.moshi.MoshiAdapterFactory;
 import com.squareup.moshi.JsonAdapter;

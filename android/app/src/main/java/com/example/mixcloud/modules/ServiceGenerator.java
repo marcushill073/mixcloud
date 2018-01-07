@@ -2,6 +2,9 @@ package com.example.mixcloud.modules;
 
 import android.content.Context;
 
+import com.example.mixcloud.rest.AuthenticationInterceptor;
+import com.example.mixcloud.rest.MyAdapterFactory;
+import com.example.mixcloud.rest.OfflineMockInterceptor;
 import com.squareup.moshi.Moshi;
 
 import okhttp3.OkHttpClient;

@@ -11,18 +11,12 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
-import com.example.mixcloud.PlayerIntentService;
-import com.example.mixcloud.PlayerService;
+import com.example.mixcloud.services.PlayerIntentService;
 import com.example.mixcloud.R;
 import com.example.mixcloud.model.MetaData;
 

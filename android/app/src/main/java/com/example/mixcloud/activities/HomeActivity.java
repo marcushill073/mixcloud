@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mixcloud.BR;
-import com.example.mixcloud.Manifest;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
@@ -30,8 +28,8 @@ import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
-import com.example.mixcloud.modules.RestService;
-import com.example.mixcloud.modules.RestServiceAPI;
+import com.example.mixcloud.rest.RestService;
+import com.example.mixcloud.rest.RestServiceAPI;
 import com.example.mixcloud.modules.ServiceGenerator;
 import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
@@ -87,9 +85,6 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(this);
-
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.MEDIA_CONTENT_CONTROL);
 
     }
 
@@ -165,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(nav.getValue());
 
-        if (fragment == null) {
+        if (fragment == null || nav == HOME) {
             if (nav == HOME) {
                 fragment = new HomeFragment();
             } else {

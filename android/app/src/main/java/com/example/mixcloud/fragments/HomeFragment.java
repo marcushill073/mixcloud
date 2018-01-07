@@ -17,7 +17,7 @@ import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
-import com.example.mixcloud.modules.RestServiceAPI;
+import com.example.mixcloud.rest.RestServiceAPI;
 import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
 

@@ -1,4 +1,4 @@
-package com.example.mixcloud.modules;
+package com.example.mixcloud.rest;
 
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.MetaData;

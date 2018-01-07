@@ -7,6 +7,9 @@ import com.example.mixcloud.BuildConfig;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.MetaData;
 import com.example.mixcloud.model.User;
+import com.example.mixcloud.rest.OfflineMockInterceptor;
+import com.example.mixcloud.rest.RestService;
+import com.example.mixcloud.rest.RestServiceAPI;
 
 import java.net.MalformedURLException;
 import java.net.URL;

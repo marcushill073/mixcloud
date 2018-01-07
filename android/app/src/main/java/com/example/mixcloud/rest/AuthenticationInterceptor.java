@@ -1,4 +1,4 @@
-package com.example.mixcloud.modules;
+package com.example.mixcloud.rest;
 
 
 import android.content.Context;
@@ -12,7 +12,7 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-class AuthenticationInterceptor implements Interceptor {
+public class AuthenticationInterceptor implements Interceptor {
 
 
     private final Context context;

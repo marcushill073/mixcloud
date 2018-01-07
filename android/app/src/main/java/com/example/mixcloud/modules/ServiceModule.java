@@ -1,5 +1,7 @@
 package com.example.mixcloud.modules;
 
+import com.example.mixcloud.rest.RestServiceAPI;
+
 import dagger.Module;
 import dagger.Provides;
 

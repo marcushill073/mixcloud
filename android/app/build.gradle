@@ -15,7 +15,7 @@ android {
             storePassword 'mixcloud'
         }
     }
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion '23.0.1'
     dataBinding {
         enabled = true
@@ -81,7 +81,6 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.9'
     testCompile 'org.powermock:powermock-core:1.7.3'

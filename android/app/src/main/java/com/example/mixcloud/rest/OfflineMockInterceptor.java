@@ -1,4 +1,4 @@
-package com.example.mixcloud.modules;
+package com.example.mixcloud.rest;
 
 import android.content.Context;
 
@@ -15,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public  class OfflineMockInterceptor implements Interceptor {
+public class OfflineMockInterceptor implements Interceptor {
 
     private static final MediaType MEDIA_JSON = MediaType.parse("application/json");
 
@@ -50,7 +50,7 @@ public  class OfflineMockInterceptor implements Interceptor {
 
     public static synchronized String parseStream(InputStream is) {
         Reader reader = new InputStreamReader(is);
-         BufferedReader br = new BufferedReader(reader);
+        BufferedReader br = new BufferedReader(reader);
         StringBuilder builder = new StringBuilder();
         try {
             String line;
