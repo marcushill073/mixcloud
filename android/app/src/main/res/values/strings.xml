@@ -13,4 +13,6 @@
     <string name="followed">Followed: </string>
     <string name="following">Following: </string>
     <string name="token">.token</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search by Artist, Title or PlayList</string>
 </resources>

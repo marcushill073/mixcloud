@@ -1,19 +1,29 @@
 package com.example.mixcloud.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
@@ -64,14 +74,18 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        View view = LayoutInflater.from(this).inflate(R.layout.custom_toolbar, null, false);
+        toolbar.addView(view);
 
         DataComponent dataComponent = DaggerDataComponent.builder()
                 .serviceModule(new ServiceModule(new ServiceModuleImpl(this)))
                 .build();
 
         dataComponent.inject(this);
-        ButterKnife.bind(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -127,6 +141,36 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 });
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_menu, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        EditText txtSearch = ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        txtSearch.setHintTextColor(Color.LTGRAY);
+        txtSearch.setTextColor(Color.BLACK);
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d("search query", query);
+        }
+    }
+
 
     @Override
     public void onGetNextPage(Navigation nav, String url) {
