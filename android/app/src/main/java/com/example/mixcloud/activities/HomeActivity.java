@@ -38,6 +38,7 @@ import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
+import com.example.mixcloud.modules.TypeImpl;
 import com.example.mixcloud.rest.RestService;
 import com.example.mixcloud.rest.RestServiceAPI;
 import com.example.mixcloud.modules.ServiceGenerator;
@@ -82,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         toolbar.addView(view);
 
         DataComponent dataComponent = DaggerDataComponent.builder()
-                .serviceModule(new ServiceModule(new ServiceModuleImpl(this)))
+                .serviceModule(new ServiceModule(new ServiceModuleImpl(this),new TypeImpl(Navigation.HOME)))
                 .build();
 
         dataComponent.inject(this);
@@ -129,8 +130,8 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
     private void fetchFeedDetails(Navigation nav) {
 
-        Observable<Feed> popularFeed = restServiceAPI.fetchFeed(mUser.username(), nav.getValue());
-        popularFeed.subscribeOn(Schedulers.newThread())
+        restServiceAPI.fetchFeed(mUser.username(), nav.getValue())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
                     FeedFragment<Navigation> feedFragment = (FeedFragment) getSupportFragmentManager()

@@ -8,7 +8,7 @@ import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Pictures;
 import com.example.mixcloud.model.Track;
-import com.example.mixcloud.model.Type;
+import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.User;
 
 import org.json.JSONObject;
@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,7 +96,7 @@ public class ServiceModuleImplTest {
     public void testFetchPopularFeed() throws IOException {
         setupOfflineFile("popular.json");
         TestSubscriber<Feed> testSubscriber = new TestSubscriber<>();
-        sut.fetchHomeFeed(Type.POPULAR.getValue())
+        sut.fetchHomeFeed(Home.POPULAR.getValue())
                 .subscribe(testSubscriber);
 
 

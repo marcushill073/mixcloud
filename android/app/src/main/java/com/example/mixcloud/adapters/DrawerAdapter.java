@@ -37,7 +37,7 @@ public class DrawerAdapter extends BaseAdapter{
         view = inflater.inflate(R.layout.item_drawer, null);
         TextView text = (TextView) view.findViewById(R.id.drawer_item_text);
         AppCompatImageView image = (AppCompatImageView) view.findViewById(R.id.drawer_item_image);
-        image.setImageResource(navigations[position].getResourceDrawable());
+        image.setImageResource(navigations[position].getImageResource(position));
         text.setText(navigations[position].getValue());
         return view;
     }

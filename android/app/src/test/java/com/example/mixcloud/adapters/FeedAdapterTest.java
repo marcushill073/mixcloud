@@ -11,7 +11,7 @@ import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
-import com.example.mixcloud.model.Type;
+import com.example.mixcloud.model.Home;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.verify;
 public class FeedAdapterTest {
 
     @Mock
-    private FeedAdapter.OnGetNextPageListener<Type> onGetNextPageListener;
+    private FeedAdapter.OnGetNextPageListener<Home> onGetNextPageListener;
 
     @Mock
     private OnPlayListener onPlayListener;
@@ -73,7 +73,7 @@ public class FeedAdapterTest {
 
     @Before
     public void setUp() throws Exception {
-        sut = new FeedAdapter<>(Type.POPULAR, onGetNextPageListener, onPlayListener);
+        sut = new FeedAdapter<>(Home.POPULAR, onGetNextPageListener, onPlayListener);
 
         tracks = new ArrayList<>();
         tracks.add(track);
@@ -132,6 +132,6 @@ public class FeedAdapterTest {
         sut.setFeed(feed);
 
         sut.notifyLastVisiblePosition(0);
-        Mockito.verify(onGetNextPageListener).onGetNextPage(any(Type.class), anyString());
+        Mockito.verify(onGetNextPageListener).onGetNextPage(any(Home.class), anyString());
     }
 }

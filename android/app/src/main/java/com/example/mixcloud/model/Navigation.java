@@ -7,7 +7,7 @@ import android.support.annotation.DrawableRes;
 
 import com.example.mixcloud.R;
 
-public enum Navigation implements Parcelable {
+public enum Navigation implements Parcelable, Type {
 
     HOME("Home"), FEED("Feed"), PLAYLISTS("Playlists"), FOLLOWERS("Followers"),
     FAVORITES("Favorites"), FOLLOWING("Following"), CLOUDCASTS("Cloudcasts"), LISTENS("Listens");
@@ -22,8 +22,8 @@ public enum Navigation implements Parcelable {
         return value;
     }
 
-    @DrawableRes
-    public int getResourceDrawable() {
+    @Override
+    public int getImageResource(int i) {
         switch (this) {
             case HOME:
                 return R.drawable.ic_iconmonstr_home_6;
@@ -41,7 +41,8 @@ public enum Navigation implements Parcelable {
                 return R.drawable.ic_iconmonstr_user_1;
             case LISTENS:
                 return R.drawable.ic_iconmonstr_headphones_1;
-                default: return 0;
+            default:
+                return 0;
         }
     }
 
@@ -71,4 +72,9 @@ public enum Navigation implements Parcelable {
             return new Navigation[size];
         }
     };
+
+    @Override
+    public Type[] getValues() {
+        return Navigation.values();
+    }
 }

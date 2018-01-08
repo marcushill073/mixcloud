@@ -6,24 +6,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;
-import com.example.mixcloud.model.Type;
+import com.example.mixcloud.model.Home;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
-    private static Map<Integer, FeedFragment<Type>> map;
-    private final FeedAdapter.OnGetNextPageListener<Type> listener;
+    private static Map<Integer, FeedFragment<Home>> map;
+    private final FeedAdapter.OnGetNextPageListener<Home> listener;
 
-    public HomePagerAdapter(FragmentManager fm, FeedAdapter.OnGetNextPageListener<Type> listener) {
+    public HomePagerAdapter(FragmentManager fm, FeedAdapter.OnGetNextPageListener<Home> listener) {
         super(fm);
         this.listener = listener;
     }
 
     @Override
     public int getCount() {
-        return Type.values().length;
+        return Home.values().length;
     }
 
     @Override
@@ -31,9 +31,9 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
         if (map == null) {
             map = new HashMap<>();
         }
-        FeedFragment<Type> fragment;
+        FeedFragment<Home> fragment;
         if (map.get(position) == null) {
-            Type type = Type.values()[position];
+            Home type = Home.values()[position];
             fragment = FeedFragment.newInstance(type);
             map.put(position, fragment);
         } else {
@@ -45,10 +45,10 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Type.values()[position].getValue();
+        return Home.values()[position].getValue();
     }
 
-    public FeedFragment<Type> getFeedFragment(int position) {
+    public FeedFragment<Home> getFeedFragment(int position) {
         if(map != null) {
             return map.get(position);
         } else {
