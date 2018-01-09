@@ -14,12 +14,13 @@ import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.adapters.HomePagerAdapter;
 import com.example.mixcloud.model.Home;
+import com.example.mixcloud.model.Type;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
-import com.example.mixcloud.modules.TypeImpl;
-import com.example.mixcloud.rest.RestServiceAPI;
 import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
+import com.example.mixcloud.modules.TypeImpl;
+import com.example.mixcloud.rest.RestServiceAPI;
 
 import java.net.MalformedURLException;
 
@@ -30,10 +31,13 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageListener<Home>, TabLayout.OnTabSelectedListener {
+public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
 
+    private static final String TYPE = ".type";
     @Inject
     public RestServiceAPI restServiceAPI;
+    @Inject
+    public Type type;
     private HomePagerAdapter adapter;
 
     @BindView(R.id.feed)
@@ -52,26 +56,28 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        adapter = new HomePagerAdapter(getChildFragmentManager(), this);
+
+        DataComponent dataComponent = DaggerDataComponent.builder()
+                .serviceModule(new ServiceModule(new ServiceModuleImpl(getContext()),
+                        TypeImpl.builder().type(getArguments().getParcelable(TYPE)).build()))
+                .build();
+
+        dataComponent.inject(this);
+        adapter = new HomePagerAdapter(getChildFragmentManager(), type, this);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
         setupTabViews();
-        fetchFeedDetails(Home.POPULAR);
+        fetchFeedDetails(type);
     }
 
-    private void fetchFeedDetails(Home type) {
-        DataComponent dataComponent = DaggerDataComponent.builder()
-                .serviceModule(new ServiceModule(new ServiceModuleImpl(getContext()), new TypeImpl(Home.POPULAR)))
-                .build();
-
-        dataComponent.inject(this);
+    private void fetchFeedDetails(Type type) {
 
         restServiceAPI.fetchHomeFeed(type.getValue())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
-                    FeedFragment<Home> fragment = adapter.getFeedFragment(type.ordinal());
+                    FeedFragment fragment = adapter.getFeedFragment(type.getOrdinal());
                     fragment.setFeed(feed);
                 }, error -> {
                     error.printStackTrace();
@@ -80,8 +86,8 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     }
 
     @Override
-    public void onGetNextPage(Home type, String url) {
-        FeedFragment<Home> baseFragment = adapter.getFeedFragment(type.ordinal());
+    public void onGetNextPage(Type type, String url) {
+        FeedFragment baseFragment = adapter.getFeedFragment(type.getOrdinal());
         if (baseFragment != null) {
             try {
 
@@ -111,7 +117,7 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
             View view = LayoutInflater.from(getContext()).inflate(R.layout.item_tab, null);
             AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.tab_image);
 
-            imageView.setImageResource(Home.values()[i].getImageResource(i));
+            imageView.setImageResource(type.getValues()[i].getImageResource(i));
             tab.setCustomView(imageView);
         }
     }
@@ -136,4 +142,12 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
 
     }
 
+    public static HomeFragment newInstance(Type type) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(TYPE, type);
+        fragment.setArguments(args);
+        return fragment;
+
+    }
 }

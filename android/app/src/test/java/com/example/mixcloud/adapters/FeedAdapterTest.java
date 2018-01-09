@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
-import com.example.mixcloud.model.Home;
 
 import org.junit.Before;
 import org.junit.Test;

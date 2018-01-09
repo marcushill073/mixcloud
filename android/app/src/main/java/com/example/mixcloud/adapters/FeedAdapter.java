@@ -2,7 +2,6 @@ package com.example.mixcloud.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,21 +12,22 @@ import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.OnPlayListener;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Track;
+import com.example.mixcloud.model.Type;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class FeedAdapter<T extends Parcelable> extends RecyclerView.Adapter<DataBinderHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<DataBinderHolder> {
 
-    private final OnGetNextPageListener<T> onGetNextPageListener;
-    private final T type;
+    private final OnGetNextPageListener onGetNextPageListener;
+    private final Type type;
     private final OnPlayListener onPlayListener;
     private Feed feed;
     private String nextPath;
     private final int pageSize = 20;
 
-    public FeedAdapter(T type, OnGetNextPageListener<T> onGetNextPageListener, OnPlayListener onPlayListener) {
+    public FeedAdapter(Type type, OnGetNextPageListener onGetNextPageListener, OnPlayListener onPlayListener) {
         this.type = type;
         this.feed = Feed.builder().data(new ArrayList<>())
                 .paging(Paging.builder().next("").build()).build();
@@ -75,7 +75,7 @@ public class FeedAdapter<T extends Parcelable> extends RecyclerView.Adapter<Data
         return feed;
     }
 
-    public interface OnGetNextPageListener<T extends Parcelable> {
-        void onGetNextPage(T string, String url);
+    public interface OnGetNextPageListener {
+        void onGetNextPage(Type string, String url);
     }
 }

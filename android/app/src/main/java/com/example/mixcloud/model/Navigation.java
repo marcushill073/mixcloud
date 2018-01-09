@@ -3,7 +3,6 @@ package com.example.mixcloud.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
 
 import com.example.mixcloud.R;
 
@@ -77,4 +76,10 @@ public enum Navigation implements Parcelable, Type {
     public Type[] getValues() {
         return Navigation.values();
     }
+
+    @Override
+    public int getOrdinal() {
+        return this.ordinal();
+    }
+
 }

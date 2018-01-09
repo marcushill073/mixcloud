@@ -6,24 +6,26 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.mixcloud.fragments.FeedFragment;
-import com.example.mixcloud.model.Home;
+import com.example.mixcloud.model.Type;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
-    private static Map<Integer, FeedFragment<Home>> map;
-    private final FeedAdapter.OnGetNextPageListener<Home> listener;
+    private static Map<Integer, FeedFragment> map;
+    private final FeedAdapter.OnGetNextPageListener listener;
+    private final Type type;
 
-    public HomePagerAdapter(FragmentManager fm, FeedAdapter.OnGetNextPageListener<Home> listener) {
+    public HomePagerAdapter(FragmentManager fm, Type type,  FeedAdapter.OnGetNextPageListener listener) {
         super(fm);
         this.listener = listener;
+        this.type = type;
     }
 
     @Override
     public int getCount() {
-        return Home.values().length;
+        return type.getValues().length;
     }
 
     @Override
@@ -31,10 +33,10 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
         if (map == null) {
             map = new HashMap<>();
         }
-        FeedFragment<Home> fragment;
+        FeedFragment fragment;
         if (map.get(position) == null) {
-            Home type = Home.values()[position];
-            fragment = FeedFragment.newInstance(type);
+            Type typeOf = this.type.getValues()[position];
+            fragment = FeedFragment.newInstance(typeOf);
             map.put(position, fragment);
         } else {
             fragment = map.get(position);
@@ -45,10 +47,10 @@ public class HomePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Home.values()[position].getValue();
+        return type.getValues()[position].getValue();
     }
 
-    public FeedFragment<Home> getFeedFragment(int position) {
+    public FeedFragment getFeedFragment(int position) {
         if(map != null) {
             return map.get(position);
         } else {

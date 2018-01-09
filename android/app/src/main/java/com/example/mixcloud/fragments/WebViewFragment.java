@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
-import com.example.mixcloud.services.PlayerIntentService;
 import com.example.mixcloud.R;
 import com.example.mixcloud.model.MetaData;
+import com.example.mixcloud.services.PlayerIntentService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -5,10 +5,10 @@ import android.content.res.AssetManager;
 
 import com.example.mixcloud.BuildConfig;
 import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.Paging;
 import com.example.mixcloud.model.Pictures;
 import com.example.mixcloud.model.Track;
-import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.User;
 
 import org.json.JSONObject;
@@ -34,7 +34,6 @@ import java.util.List;
 import rx.observers.TestSubscriber;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @PrepareForTest({BuildConfig.class})

@@ -6,7 +6,7 @@ import android.support.annotation.DrawableRes;
 
 import com.example.mixcloud.R;
 
-public enum Home implements Parcelable, Type {
+public enum Home implements Type, Parcelable {
     POPULAR("popular"), HOT("popular/hot"), NEW("new");
 
     private final String value;
@@ -63,5 +63,10 @@ public enum Home implements Parcelable, Type {
     @Override
     public Type[] getValues() {
         return Home.values();
+    }
+
+    @Override
+    public int getOrdinal() {
+        return this.ordinal();
     }
 }

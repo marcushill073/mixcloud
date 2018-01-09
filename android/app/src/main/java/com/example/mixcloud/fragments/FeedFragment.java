@@ -1,7 +1,6 @@
 package com.example.mixcloud.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,12 +15,14 @@ import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.OnPlayListener;
+import com.example.mixcloud.model.Type;
 
-public class FeedFragment<T extends Parcelable> extends Fragment {
+public class FeedFragment extends Fragment {
 
     public static final String FEED = ".feed";
     private static final String ON_NEXT_PAGE_LISTENER = ".onNextPageListener";
-    private FeedAdapter<T> feedAdapter;
+    private FeedAdapter feedAdapter;
+    Type type;
 
     public void setLoading(boolean loading) {
         this.loading = loading;
@@ -55,9 +56,9 @@ public class FeedFragment<T extends Parcelable> extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstance) {
         super.onActivityCreated(savedInstance);
-        T type = (T) getArguments().getSerializable(FEED);
+        type = (Type) getArguments().getSerializable(FEED);
 
-        FeedAdapter.OnGetNextPageListener<T> listener = (FeedAdapter.OnGetNextPageListener<T>) getParentFragment();
+        FeedAdapter.OnGetNextPageListener listener = (FeedAdapter.OnGetNextPageListener) getParentFragment();
 
         feedAdapter = new FeedAdapter(type, listener, (OnPlayListener) getActivity());
 
@@ -93,12 +94,12 @@ public class FeedFragment<T extends Parcelable> extends Fragment {
         return feedAdapter.getItemCount() == 0;
     }
 
-    public T getType() {
+    public Type getType() {
         return getArguments().getParcelable(FEED);
     }
 
-    public static <T extends Parcelable> FeedFragment newInstance(T type) {
-        FeedFragment<T> fragment = new FeedFragment<>();
+    public static FeedFragment newInstance(Type type) {
+        FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
         args.putParcelable(FEED, type);
         fragment.setArguments(args);

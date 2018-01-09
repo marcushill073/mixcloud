@@ -23,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.mixcloud.BR;
 import com.example.mixcloud.R;
@@ -32,18 +31,19 @@ import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.fragments.HomeFragment;
 import com.example.mixcloud.fragments.WebViewFragment;
-import com.example.mixcloud.model.Feed;
+import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
+import com.example.mixcloud.model.Type;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
-import com.example.mixcloud.modules.TypeImpl;
-import com.example.mixcloud.rest.RestService;
-import com.example.mixcloud.rest.RestServiceAPI;
 import com.example.mixcloud.modules.ServiceGenerator;
 import com.example.mixcloud.modules.ServiceModule;
 import com.example.mixcloud.modules.ServiceModuleImpl;
+import com.example.mixcloud.modules.TypeImpl;
+import com.example.mixcloud.rest.RestService;
+import com.example.mixcloud.rest.RestServiceAPI;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
@@ -52,13 +52,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static com.example.mixcloud.model.Navigation.HOME;
 
-public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener<Navigation>, OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
+public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGetNextPageListener, OnPlayListener, AdapterView.OnItemClickListener, View.OnClickListener {
 
     private static final String PLAYER = ".player";
     @Inject
@@ -83,14 +82,14 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         toolbar.addView(view);
 
         DataComponent dataComponent = DaggerDataComponent.builder()
-                .serviceModule(new ServiceModule(new ServiceModuleImpl(this),new TypeImpl(Navigation.HOME)))
+                .serviceModule(new ServiceModule(new ServiceModuleImpl(this), TypeImpl.builder().type(Navigation.HOME).build()))
                 .build();
 
         dataComponent.inject(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_holder, new HomeFragment(), Navigation.HOME.getValue())
+                .add(R.id.fragment_holder, HomeFragment.newInstance(Home.POPULAR), Navigation.HOME.getValue())
                 .commit();
 
         fetchUserDetails();
@@ -134,7 +133,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
-                    FeedFragment<Navigation> feedFragment = (FeedFragment) getSupportFragmentManager()
+                    FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
                             .findFragmentByTag(nav.getValue());
                     feedFragment.setFeed(feed);
                 }, error -> {
@@ -153,7 +152,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        EditText txtSearch = ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
+        EditText txtSearch = ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text));
         txtSearch.setHintTextColor(Color.LTGRAY);
         txtSearch.setTextColor(Color.BLACK);
         return true;
@@ -174,8 +173,8 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
 
     @Override
-    public void onGetNextPage(Navigation nav, String url) {
-        FeedFragment<Navigation> feedFragment = (FeedFragment) getSupportFragmentManager()
+    public void onGetNextPage(Type nav, String url) {
+        FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
                 .findFragmentByTag(nav.getValue());
         if (feedFragment != null) {
             try {
@@ -207,7 +206,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
         if (fragment == null || nav == HOME) {
             if (nav == HOME) {
-                fragment = new HomeFragment();
+                fragment = HomeFragment.newInstance(Home.POPULAR);
             } else {
                 fragment = FeedFragment.newInstance(nav);
             }
