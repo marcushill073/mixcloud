@@ -207,6 +207,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         if (fragment == null || nav == HOME) {
             if (nav == HOME) {
                 fragment = HomeFragment.newInstance(Home.POPULAR);
+                fetchFeedDetails(HOME);
             } else {
                 fragment = FeedFragment.newInstance(nav);
             }
