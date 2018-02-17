@@ -30,6 +30,7 @@ import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.fragments.FeedFragment;
 import com.example.mixcloud.fragments.TabFragment;
 import com.example.mixcloud.fragments.WebViewFragment;
+import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
@@ -52,6 +53,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -127,10 +130,15 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         Picasso.with(view.getContext()).load(url).into(view);
     }
 
-    private void fetchFeedDetails(Type type) {
+    private void fetchFeedDetails(Type type, String query) {
 
-        restServiceAPI.fetchFeed(mUser.username(), type.getValue())
-                .subscribeOn(Schedulers.newThread())
+        Observable<Feed> subscription;
+        if (query != null) {
+            subscription = restServiceAPI.fetchFeed(mUser.username(), type.getValue());
+        } else {
+            subscription = restServiceAPI.fetchTabFeed(type.getValue(), query);
+        }
+        subscription.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
                     FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
@@ -174,12 +182,11 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                     .beginTransaction()
                     .replace(R.id.fragment_holder, fragment, type.getValue())
                     .commit();
-            fetchFeedDetails(type);
+            fetchFeedDetails(type, query);
 
         }
 
     }
-
 
     @Override
     public void onGetNextPage(Type nav, String url) {
@@ -216,7 +223,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         if (fragment == null || nav == HOME) {
             if (nav == HOME) {
                 fragment = TabFragment.newInstance(Home.POPULAR, null);
-                fetchFeedDetails(HOME);
+                fetchFeedDetails(HOME, "");
             } else {
                 fragment = FeedFragment.newInstance(nav);
             }
@@ -228,7 +235,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
                 .commit();
 
         if (nav != HOME) {
-            fetchFeedDetails(nav);
+            fetchFeedDetails(nav, null);
         }
         drawerLayout.closeDrawer(Gravity.LEFT);
     }
