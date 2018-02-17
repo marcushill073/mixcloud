@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.adapters.HomePagerAdapter;
+import com.example.mixcloud.model.Feed;
 import com.example.mixcloud.model.Home;
+import com.example.mixcloud.model.Search;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.modules.DaggerDataComponent;
 import com.example.mixcloud.modules.DataComponent;
@@ -28,11 +30,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
+public class TabFragment extends Fragment implements FeedAdapter.OnGetNextPageListener, TabLayout.OnTabSelectedListener {
 
+    private static final String QUERY = ".query";
     private static final String TYPE = ".type";
     @Inject
     public RestServiceAPI restServiceAPI;
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     public ViewPager viewPager;
     @BindView(R.id.tab_layout)
     public TabLayout tabLayout;
+    private String query;
 
     @Nullable
     @Override
@@ -68,12 +74,13 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
         setupTabViews();
-        fetchFeedDetails(type);
+        query = getArguments().getString(QUERY);
+        fetchFeedDetails(type, query);
     }
 
-    private void fetchFeedDetails(Type type) {
+    private void fetchFeedDetails(Type path, String search) {
 
-        restServiceAPI.fetchHomeFeed(type.getValue())
+        restServiceAPI.fetchTabFeed(path.getValue(), search)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
@@ -82,7 +89,6 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
                 }, error -> {
                     error.printStackTrace();
                 });
-
     }
 
     @Override
@@ -92,7 +98,7 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
             try {
 
                 baseFragment.setLoading(true);
-                restServiceAPI.fetchNextHomePage(type.getValue(), url)
+                restServiceAPI.fetchNextTabPage(type.getValue(), "", url)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(next -> {
@@ -126,10 +132,14 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
     public void onTabSelected(TabLayout.Tab tab) {
 
         if (adapter.getFeedFragment(tab.getPosition()) == null ||
-                adapter.getFeedFragment(tab.getPosition()).isEmpty()) {
-            Home type = Home.values()[tab.getPosition()];
-            fetchFeedDetails(type);
+                adapter.getFeedFragment(tab.getPosition()).isEmpty() && query == null) {
+            type = Home.values()[tab.getPosition()];
+            fetchFeedDetails(type, query);
+        } else {
+            type = Search.values()[tab.getPosition()];
         }
+        fetchFeedDetails(type, query);
+
     }
 
     @Override
@@ -142,12 +152,14 @@ public class HomeFragment extends Fragment implements FeedAdapter.OnGetNextPageL
 
     }
 
-    public static HomeFragment newInstance(Type type) {
-        HomeFragment fragment = new HomeFragment();
+    public static TabFragment newInstance(Type type, String query) {
+        TabFragment fragment = new TabFragment();
         Bundle args = new Bundle();
         args.putParcelable(TYPE, type);
+        args.putString(QUERY, query);
         fragment.setArguments(args);
         return fragment;
 
     }
+
 }

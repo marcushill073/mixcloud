@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,11 +28,12 @@ import com.example.mixcloud.R;
 import com.example.mixcloud.adapters.DrawerAdapter;
 import com.example.mixcloud.adapters.FeedAdapter;
 import com.example.mixcloud.fragments.FeedFragment;
-import com.example.mixcloud.fragments.HomeFragment;
+import com.example.mixcloud.fragments.TabFragment;
 import com.example.mixcloud.fragments.WebViewFragment;
 import com.example.mixcloud.model.Home;
 import com.example.mixcloud.model.Navigation;
 import com.example.mixcloud.model.OnPlayListener;
+import com.example.mixcloud.model.Search;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.model.User;
 import com.example.mixcloud.modules.DaggerDataComponent;
@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_holder, HomeFragment.newInstance(Home.POPULAR), Navigation.HOME.getValue())
+                .add(R.id.fragment_holder, TabFragment.newInstance(Home.POPULAR, null), Navigation.HOME.getValue())
                 .commit();
 
         fetchUserDetails();
@@ -127,19 +127,18 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
         Picasso.with(view.getContext()).load(url).into(view);
     }
 
-    private void fetchFeedDetails(Navigation nav) {
+    private void fetchFeedDetails(Type type) {
 
-        restServiceAPI.fetchFeed(mUser.username(), nav.getValue())
+        restServiceAPI.fetchFeed(mUser.username(), type.getValue())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(feed -> {
                     FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
-                            .findFragmentByTag(nav.getValue());
+                            .findFragmentByTag(type.getValue());
                     feedFragment.setFeed(feed);
                 }, error -> {
                     error.printStackTrace();
                 });
-
     }
 
     @Override
@@ -164,11 +163,21 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
     }
 
     private void handleIntent(Intent intent) {
-
+        Type type;
+        String query = null;
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d("search query", query);
+            query = intent.getStringExtra(SearchManager.QUERY);
+            type = Search.ARTIST;
+            TabFragment fragment = TabFragment.newInstance(type, query);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_holder, fragment, type.getValue())
+                    .commit();
+            fetchFeedDetails(type);
+
         }
+
     }
 
 
@@ -180,7 +189,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
             try {
 
                 feedFragment.setLoading(true);
-                restServiceAPI.fetchNextFeedPage(mUser.username(), nav.getValue(), url)
+                restServiceAPI.fetchNextPage(mUser.username(), nav.getValue(), url)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(next -> {
@@ -206,7 +215,7 @@ public class HomeActivity extends AppCompatActivity implements FeedAdapter.OnGet
 
         if (fragment == null || nav == HOME) {
             if (nav == HOME) {
-                fragment = HomeFragment.newInstance(Home.POPULAR);
+                fragment = TabFragment.newInstance(Home.POPULAR, null);
                 fetchFeedDetails(HOME);
             } else {
                 fragment = FeedFragment.newInstance(nav);

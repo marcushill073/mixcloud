@@ -8,7 +8,7 @@ import com.example.mixcloud.R;
 
 public enum Search implements Type, Parcelable {
 
-    TAG("tag"), USER("user"), CLOUDCAST("cloudcast"), ARTIST("artist") ;
+    TAG("tag"), CLOUDCAST("cloudcast"), ARTIST("user") ;
 
     private String value;
 

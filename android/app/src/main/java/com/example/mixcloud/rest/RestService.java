@@ -12,15 +12,14 @@ import rx.Observable;
 
 public interface RestService {
 
-    @POST("me")
+    @GET("me")
     Observable<User> fetchUser();
 
+    @GET("search")
+    Observable<Feed> fetchSearchFeed( @Query("q") String searchString, @Query("type") String type);
 
-    @GET("{feed}")
-    Observable<Feed> fetchHomeFeed(@Path("feed") String type);
-
-    @GET("{feed}")
-    Observable<Feed> fetchHomeFeedPage(@Path("feed") String type, @Query("limit") int limit, @Query("offset") int offset);
+    @GET("search")
+    Observable<Feed> fetchNextSearchPage( @Query("limit") int limit, @Query("offset") int offset, @Query("q") String searchString, @Query("type") String type);
 
     @GET("{user}/{feed}")
     Observable<Feed> fetchFeed(@Path("user") String user, @Path("feed") String navigation);

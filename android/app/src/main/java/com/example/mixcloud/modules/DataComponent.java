@@ -2,7 +2,7 @@ package com.example.mixcloud.modules;
 
 
 import com.example.mixcloud.activities.HomeActivity;
-import com.example.mixcloud.fragments.HomeFragment;
+import com.example.mixcloud.fragments.TabFragment;
 import com.example.mixcloud.model.Type;
 import com.example.mixcloud.rest.RestServiceAPI;
 
@@ -17,6 +17,6 @@ public interface DataComponent {
 
     void inject(HomeActivity homeActivity);
 
-    void inject(HomeFragment homeFragment);
+    void inject(TabFragment tabFragment);
 
 }

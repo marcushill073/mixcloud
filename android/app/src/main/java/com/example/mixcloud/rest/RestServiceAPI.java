@@ -12,13 +12,13 @@ public interface RestServiceAPI {
 
     Observable<User> fetchUser();
 
-    Observable<Feed> fetchHomeFeed(String type);
+    Observable<Feed> fetchTabFeed(String type, String search);
 
-    Observable<Feed> fetchNextHomePage(String type, String url) throws MalformedURLException;
+    Observable<Feed> fetchNextTabPage(String type, String search, String url) throws MalformedURLException;
 
-    Observable<Feed> fetchFeed(String user, String navigation);
+    Observable<Feed> fetchFeed(String user, String type);
 
-    Observable<Feed> fetchNextFeedPage(String user, String navigation, String url) throws MalformedURLException;
+    Observable<Feed> fetchNextPage(String user, String type, String url) throws MalformedURLException;
 
     Observable<MetaData> fetchMetaData(String url);
 

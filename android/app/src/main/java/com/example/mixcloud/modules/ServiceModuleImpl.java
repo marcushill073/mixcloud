@@ -22,7 +22,7 @@ public class ServiceModuleImpl implements RestServiceAPI {
 
     public ServiceModuleImpl(Context context) {
         if (BuildConfig.BUILD_TYPE == "mock") {
-            restService = ServiceGenerator.createService(RestService.class,new OfflineMockInterceptor(context));
+            restService = ServiceGenerator.createService(RestService.class, new OfflineMockInterceptor(context));
         } else {
             restService = ServiceGenerator.createService(RestService.class, context);
         }
@@ -34,30 +34,37 @@ public class ServiceModuleImpl implements RestServiceAPI {
     }
 
     @Override
-    public Observable<Feed> fetchHomeFeed(String type) {
-        return restService.fetchHomeFeed(type);
+    public Observable<Feed> fetchTabFeed(String type, String search) {
+        if (search == null || search.isEmpty()) {
+            return restService.fetchFeed("", type);
+        } else {
+            return restService.fetchSearchFeed(search, type);
+        }
     }
 
     @Override
-    public synchronized Observable<Feed> fetchNextHomePage(String type, String path) throws MalformedURLException {
-        GetOffSet getOffSet = new GetOffSet(path).invoke();
-        int limit = getOffSet.getLimit();
-        int offset = getOffSet.getOffset();
-        return restService.fetchHomeFeedPage(type, limit, offset);
-
-    }
-
-    @Override
-    public Observable<Feed> fetchFeed(String user, String navigation) {
-        return restService.fetchFeed(user, navigation.toLowerCase());
-    }
-
-    @Override
-    public Observable<Feed> fetchNextFeedPage(String user, String navigation, String url) throws MalformedURLException {
+    public Observable<Feed> fetchNextTabPage(String type, String search, String url) throws MalformedURLException {
         GetOffSet getOffSet = new GetOffSet(url).invoke();
         int limit = getOffSet.getLimit();
         int offset = getOffSet.getOffset();
-        return restService.fetchNextFeedPage(user, navigation, limit, offset);
+        if (search != null || search.isEmpty()) {
+            return restService.fetchNextFeedPage("", type, limit, offset);
+        } else {
+            return restService.fetchNextSearchPage(limit, offset, search, type);
+        }
+    }
+
+    @Override
+    public Observable<Feed> fetchFeed(String user, String type) {
+        return restService.fetchFeed(user, type.toLowerCase());
+    }
+
+    @Override
+    public Observable<Feed> fetchNextPage(String user, String type, String url) throws MalformedURLException {
+        GetOffSet getOffSet = new GetOffSet(url).invoke();
+        int limit = getOffSet.getLimit();
+        int offset = getOffSet.getOffset();
+        return restService.fetchNextFeedPage(user, type.toLowerCase(), limit, offset);
     }
 
     @Override
@@ -100,4 +107,5 @@ public class ServiceModuleImpl implements RestServiceAPI {
             return this;
         }
     }
+
 }
